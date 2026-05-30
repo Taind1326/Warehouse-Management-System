@@ -179,7 +179,7 @@ namespace Do_An.ViewModels.Admin
             IsEdit = false;
             XoaForm();
             LoadComboBox();
-            _moForm();
+            _moForm?.Invoke();
         }
 
         private void MoSua()
@@ -193,7 +193,7 @@ namespace Do_An.ViewModels.Admin
             IsEdit = true;
             LoadComboBox();
             DoDuLieuLenForm(HangHoaDangChon);
-            _moForm();
+            _moForm?.Invoke();
         }
 
         private void Luu()
@@ -238,6 +238,7 @@ namespace Do_An.ViewModels.Admin
 
                 SANPHAM sp = TaoSanPhamMoi(db);
                 db.SANPHAMs.Add(sp);
+
 
                 GhiLog(db, "Thêm sản phẩm", MaHang, "Thêm hàng hóa " + TenHang);
 
@@ -359,6 +360,8 @@ namespace Do_An.ViewModels.Admin
                         return;
                     }
 
+                    XoaTonKhoMacDinhCuaSanPham(db, sp.MASP);
+
                     db.SANPHAMs.Remove(sp);
 
                     GhiLog(db, "Xóa sản phẩm", sp.MASP, "Xóa hàng hóa " + sp.TENSP);
@@ -372,6 +375,18 @@ namespace Do_An.ViewModels.Admin
             catch (Exception ex)
             {
                 MessageBox.Show("Xóa thất bại!\n" + ex.Message);
+            }
+        }
+
+        private void XoaTonKhoMacDinhCuaSanPham(QUANLI_KHOHANGEntities db, string maSP)
+        {
+            var dsTonKho = db.TONKHOes
+                .Where(x => x.MASP == maSP && x.SOLUONGTON == 0)
+                .ToList();
+
+            foreach (var tonKho in dsTonKho)
+            {
+                db.TONKHOes.Remove(tonKho);
             }
         }
 
@@ -418,9 +433,12 @@ namespace Do_An.ViewModels.Admin
             DonViTinh = hh.DonViTinh;
             GiaNhap = hh.GiaNhap;
             SoLuongTon = hh.SoLuongTon;
-            SoLuongToiThieu = "0";
-            NgayNhap = DateTime.Now;
-            GhiChu = "";
+
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                var sp = db.SANPHAMs.FirstOrDefault(x => x.MASP == hh.MaHang);
+                SoLuongToiThieu = sp?.MUCTONTOITHIEU.ToString() ?? "0";
+            }
 
             BaoThayDoiForm();
         }
@@ -429,12 +447,12 @@ namespace Do_An.ViewModels.Admin
         {
             MaHang = "";
             TenHang = "";
-            TenLoaiHang = "";
-            TenNSX = "";
-            DonViTinh = "";
-            GiaNhap = "";
+            TenLoaiHang = DanhSachLoaiHang?.FirstOrDefault();
+            TenNSX = DanhSachNSX?.FirstOrDefault();
+            DonViTinh = DanhSachDonViTinh?.FirstOrDefault();
+            GiaNhap = "0";
             SoLuongTon = "0";
-            SoLuongToiThieu = "0";
+            SoLuongToiThieu = "5";
             NgayNhap = DateTime.Now;
             GhiChu = "";
 
@@ -443,7 +461,8 @@ namespace Do_An.ViewModels.Admin
 
         private bool KiemTraDuLieu()
         {
-            ChuanHoaDuLieuForm();
+            MaHang = MaHang?.Trim();
+            TenHang = TenHang?.Trim();
 
             if (string.IsNullOrWhiteSpace(MaHang))
             {
@@ -451,21 +470,9 @@ namespace Do_An.ViewModels.Admin
                 return false;
             }
 
-            if (!MaHang.StartsWith("SP") || MaHang.Length != 6)
-            {
-                MessageBox.Show("Mã hàng phải có dạng SP0001!");
-                return false;
-            }
-
             if (string.IsNullOrWhiteSpace(TenHang))
             {
                 MessageBox.Show("Vui lòng nhập tên hàng!");
-                return false;
-            }
-
-            if (TenHang.Length < 2)
-            {
-                MessageBox.Show("Tên hàng phải có ít nhất 2 ký tự!");
                 return false;
             }
 
@@ -487,104 +494,17 @@ namespace Do_An.ViewModels.Admin
                 return false;
             }
 
-            if (!KiemTraGiaNhapHopLe())
-                return false;
-
-            if (!KiemTraSoLuongTonHopLe())
-                return false;
-
-            if (!KiemTraSoLuongToiThieuHopLe())
-                return false;
-
-            if (NgayNhap > DateTime.Now)
+            decimal giaNhap = ChuyenTienSangSo(GiaNhap);
+            if (giaNhap < 0)
             {
-                MessageBox.Show("Ngày nhập không hợp lệ!");
+                MessageBox.Show("Giá nhập không được âm!");
                 return false;
             }
 
-            using (var db = new QUANLI_KHOHANGEntities())
+            int mucTon;
+            if (!int.TryParse(SoLuongToiThieu, out mucTon) || mucTon < 0)
             {
-                if (LayMaLoaiHang(db) == null)
-                {
-                    MessageBox.Show("Loại hàng không hợp lệ!");
-                    return false;
-                }
-
-                if (LayMaNSX(db) == null)
-                {
-                    MessageBox.Show("Nhà sản xuất không hợp lệ!");
-                    return false;
-                }
-
-                if (LayMaDonViTinh(db) == null)
-                {
-                    MessageBox.Show("Đơn vị tính không hợp lệ!");
-                    return false;
-                }
-            }
-
-            BaoThayDoiForm();
-            return true;
-        }
-
-        private void ChuanHoaDuLieuForm()
-        {
-            MaHang = MaHang?.Trim();
-            TenHang = TenHang?.Trim();
-            TenLoaiHang = TenLoaiHang?.Trim();
-            TenNSX = TenNSX?.Trim();
-            DonViTinh = DonViTinh?.Trim();
-            GiaNhap = GiaNhap?.Trim();
-            SoLuongTon = SoLuongTon?.Trim();
-            SoLuongToiThieu = SoLuongToiThieu?.Trim();
-            GhiChu = GhiChu?.Trim();
-        }
-
-        private bool KiemTraGiaNhapHopLe()
-        {
-            decimal gia = ChuyenTienSangSo(GiaNhap);
-
-            if (gia <= 0)
-            {
-                MessageBox.Show("Giá nhập phải lớn hơn 0!");
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool KiemTraSoLuongTonHopLe()
-        {
-            int sl;
-
-            if (!int.TryParse(SoLuongTon, out sl))
-            {
-                MessageBox.Show("Số lượng không hợp lệ!");
-                return false;
-            }
-
-            if (sl < 0)
-            {
-                MessageBox.Show("Số lượng không được âm!");
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool KiemTraSoLuongToiThieuHopLe()
-        {
-            int sl;
-
-            if (!int.TryParse(SoLuongToiThieu, out sl))
-            {
-                MessageBox.Show("Số lượng tối thiểu không hợp lệ!");
-                return false;
-            }
-
-            if (sl < 0)
-            {
-                MessageBox.Show("Số lượng tối thiểu không được âm!");
+                MessageBox.Show("Số lượng tối thiểu phải là số nguyên không âm!");
                 return false;
             }
 
@@ -607,16 +527,18 @@ namespace Do_An.ViewModels.Admin
         private void QuayLaiDanhSach()
         {
             LoadHangHoa();
-            _quayLaiDanhSach();
+            _quayLaiDanhSach?.Invoke();
         }
 
         private void VeTrangChu()
         {
-            _veTrangChu();
+            _veTrangChu?.Invoke();
         }
 
         private void BaoThayDoiForm()
         {
+            OnPropertyChanged(nameof(IsEdit));
+            OnPropertyChanged(nameof(TieuDe));
             OnPropertyChanged(nameof(MaHang));
             OnPropertyChanged(nameof(TenHang));
             OnPropertyChanged(nameof(TenLoaiHang));
@@ -642,3 +564,4 @@ namespace Do_An.ViewModels.Admin
         public string SoLuongTon { get; set; }
     }
 }
+

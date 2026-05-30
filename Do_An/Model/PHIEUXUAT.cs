@@ -21,15 +21,15 @@ namespace Do_An.Model
     
         public string MAPX { get; set; }
         public string MAKHO { get; set; }
-        public string MAKH { get; set; }
+        public string MAKHONHAN { get; set; }
         public string MATK { get; set; }
         public System.DateTime NGAYXUAT { get; set; }
         public decimal TONGTIEN { get; set; }
         public string TRANGTHAI { get; set; }
     
         public virtual ICollection<CT_PHIEUXUAT> CT_PHIEUXUAT { get; set; }
-        public virtual KHACHHANG KHACHHANG { get; set; }
         public virtual KHO KHO { get; set; }
+        public virtual KHO KHO1 { get; set; }
         public virtual TAIKHOAN TAIKHOAN { get; set; }
     }
 }

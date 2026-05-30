@@ -235,6 +235,15 @@ namespace Do_An.ViewModels.Admin
 
         private void MoThem()
         {
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                if (!CoQuyenThemPhieuNhap(db))
+                {
+                    MessageBox.Show("Chỉ Admin và Nhân viên kho được thêm phiếu nhập!");
+                    return;
+                }
+            }
+
             IsEdit = false;
             XoaForm();
             BaoThayDoiForm();
@@ -308,10 +317,11 @@ namespace Do_An.ViewModels.Admin
                             return;
                         }
 
+                        TruTonKhoTheoChiTietCu(db, pn.MAKHO, pn.MAPN);
                         pn.TRANGTHAI = "Đã hủy";
 
                         GhiLog(db, "Hủy phiếu nhập", pn.MAPN,
-                            "Admin chuyển phiếu đã nhập sang trạng thái Đã hủy");
+                            "Admin chuyển phiếu đã nhập sang trạng thái Đã hủy và trừ lại tồn kho");
 
                         db.SaveChanges();
 
@@ -441,6 +451,12 @@ namespace Do_An.ViewModels.Admin
             {
                 using (var db = new QUANLI_KHOHANGEntities())
                 {
+                    if (!IsEdit && !CoQuyenThemPhieuNhap(db))
+                    {
+                        MessageBox.Show("Chỉ Admin và Nhân viên kho được thêm phiếu nhập!");
+                        return;
+                    }
+
                     if (IsEdit)
                         SuaPhieuNhap(db, trangThai);
                     else
@@ -466,10 +482,12 @@ namespace Do_An.ViewModels.Admin
             if (db.PHIEUNHAPs.Any(x => x.MAPN == MaPhieuNhap))
                 throw new Exception("Mã phiếu nhập đã tồn tại!");
 
+            string maKho = LayMaKho(db);
+
             var pn = new PHIEUNHAP
             {
                 MAPN = MaPhieuNhap,
-                MAKHO = LayMaKho(db),
+                MAKHO = maKho,
                 MANSX = LayMaNSX(db),
                 MATK = LayMaTaiKhoan(db),
                 NGAYNHAP = NgayNhap,
@@ -490,6 +508,9 @@ namespace Do_An.ViewModels.Admin
                 });
             }
 
+            if (trangThai == "Đã nhập")
+                CongTonKhoTheoDanhSachMoi(db, maKho);
+
             GhiLog(db, "Tạo phiếu nhập", MaPhieuNhap,
                 "Tạo phiếu nhập " + MaPhieuNhap);
         }
@@ -501,7 +522,14 @@ namespace Do_An.ViewModels.Admin
             if (pn == null)
                 throw new Exception("Không tìm thấy phiếu nhập cần sửa!");
 
-            pn.MAKHO = LayMaKho(db);
+            string maKhoCu = pn.MAKHO;
+            string trangThaiCu = pn.TRANGTHAI;
+            string maKhoMoi = LayMaKho(db);
+
+            if (trangThaiCu == "Đã nhập")
+                TruTonKhoTheoChiTietCu(db, maKhoCu, pn.MAPN);
+
+            pn.MAKHO = maKhoMoi;
             pn.MANSX = LayMaNSX(db);
             pn.MATK = LayMaTaiKhoan(db);
             pn.NGAYNHAP = NgayNhap;
@@ -528,8 +556,57 @@ namespace Do_An.ViewModels.Admin
                 });
             }
 
+            if (trangThai == "Đã nhập")
+                CongTonKhoTheoDanhSachMoi(db, maKhoMoi);
+
             GhiLog(db, "Sửa phiếu nhập", MaPhieuNhap,
                 "Sửa phiếu nhập " + MaPhieuNhap);
+        }
+
+        private void CongTonKhoTheoDanhSachMoi(QUANLI_KHOHANGEntities db, string maKho)
+        {
+            foreach (var item in DanhSachChiTietNhap)
+            {
+                var tonKho = db.TONKHOes.FirstOrDefault(x =>
+                    x.MAKHO == maKho &&
+                    x.MASP == item.MaHang);
+
+                if (tonKho == null)
+                {
+                    tonKho = new TONKHO
+                    {
+                        MAKHO = maKho,
+                        MASP = item.MaHang,
+                        SOLUONGTON = 0
+                    };
+
+                    db.TONKHOes.Add(tonKho);
+                }
+
+                tonKho.SOLUONGTON += item.SoLuong;
+            }
+        }
+
+        private void TruTonKhoTheoChiTietCu(QUANLI_KHOHANGEntities db, string maKho, string maPN)
+        {
+            var dsCu = db.CT_PHIEUNHAP
+                .Where(x => x.MAPN == maPN)
+                .ToList();
+
+            foreach (var item in dsCu)
+            {
+                var tonKho = db.TONKHOes.FirstOrDefault(x =>
+                    x.MAKHO == maKho &&
+                    x.MASP == item.MASP);
+
+                if (tonKho == null)
+                    throw new Exception("Không tìm thấy tồn kho của sản phẩm " + item.MASP);
+
+                if (tonKho.SOLUONGTON < item.SOLUONG)
+                    throw new Exception("Tồn kho không đủ để hủy/sửa phiếu nhập " + maPN);
+
+                tonKho.SOLUONGTON -= item.SOLUONG;
+            }
         }
 
         private bool KiemTraDuLieu()
@@ -539,6 +616,12 @@ namespace Do_An.ViewModels.Admin
             if (string.IsNullOrWhiteSpace(MaPhieuNhap))
             {
                 MessageBox.Show("Vui lòng nhập mã phiếu nhập!");
+                return false;
+            }
+
+            if (!KiemTraMaPhieuNhap(MaPhieuNhap))
+            {
+                MessageBox.Show("Mã phiếu nhập phải có dạng PN + số. Ví dụ: PN001, PN0001.");
                 return false;
             }
 
@@ -567,6 +650,24 @@ namespace Do_An.ViewModels.Admin
             }
 
             return true;
+        }
+
+        private bool KiemTraMaPhieuNhap(string maPhieuNhap)
+        {
+            if (string.IsNullOrWhiteSpace(maPhieuNhap))
+                return false;
+
+            maPhieuNhap = maPhieuNhap.Trim();
+
+            if (!maPhieuNhap.StartsWith("PN", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            string phanSo = maPhieuNhap.Substring(2);
+
+            if (string.IsNullOrWhiteSpace(phanSo))
+                return false;
+
+            return phanSo.All(char.IsDigit);
         }
 
         private void TimKiemPhieuNhap()
@@ -697,6 +798,21 @@ namespace Do_An.ViewModels.Admin
             return taiKhoan.VAITROes.Any(vt => vt.TENVT == "Admin");
         }
 
+        private bool LaNhanVienKho(QUANLI_KHOHANGEntities db)
+        {
+            var taiKhoan = db.TAIKHOANs
+                .FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+
+            if (taiKhoan == null)
+                return false;
+
+            return taiKhoan.VAITROes.Any(vt => vt.TENVT == "NhanVienKho");
+        }
+
+        private bool CoQuyenThemPhieuNhap(QUANLI_KHOHANGEntities db)
+        {
+            return LaAdmin(db) || LaNhanVienKho(db);
+        }
 
         private void VeTrangChu()
         {
@@ -744,8 +860,6 @@ namespace Do_An.ViewModels.Admin
             OnPropertyChanged(nameof(TongTien));
         }
     }
-
-
 
     public class PhieuNhapItem
     {

@@ -4,28 +4,27 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bf5af900cffa4838a1a134763c51e2c4" Name="Diagram1">
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CT_KIEMKE" Width="1.5" PointX="10.5" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CT_PHIEUNHAP" Width="1.5" PointX="10.5" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CT_PHIEUXUAT" Width="1.5" PointX="10.5" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.DONVITINH" Width="1.5" PointX="6" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.KHACHHANG" Width="1.5" PointX="6" PointY="29" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.KHO" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.KIEMKEKHO" Width="1.5" PointX="5.25" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.LOAIHANG" Width="1.5" PointX="6" PointY="20.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.NHANVIEN" Width="1.5" PointX="0.75" PointY="10" IsExpanded="true" />
+      <Diagram DiagramId="4a5cd16ea3b4470991e73ac088a77fa7" Name="Diagram1">
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CT_KIEMKE" Width="1.5" PointX="10.5" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CT_PHIEUNHAP" Width="1.5" PointX="10.5" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CT_PHIEUXUAT" Width="1.5" PointX="10.5" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.DONVITINH" Width="1.5" PointX="6" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.KHO" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.KIEMKEKHO" Width="1.5" PointX="5.25" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.LOAIHANG" Width="1.5" PointX="6" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.NHANVIEN" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
         <EntityTypeShape EntityType="QUANLI_KHOHANGModel.NHASANXUAT" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.NHATKY" Width="1.5" PointX="5.25" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.PHANCONG_KHO" Width="1.5" PointX="8.25" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.PHIEUNHAP" Width="1.5" PointX="8.25" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.PHIEUXUAT" Width="1.5" PointX="8.25" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.SANPHAM" Width="1.5" PointX="8.25" PointY="18.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.TAIKHOAN" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.TONKHO" Width="1.5" PointX="13.5" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.VAITRO" Width="1.5" PointX="5.25" PointY="26.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.V_BAOCAO_XUAT" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.V_NHATKY_DANGNHAP" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.V_NHATKY_THAOTAC" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.NHATKY" Width="1.5" PointX="5.25" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.PHANCONG_KHO" Width="1.5" PointX="8.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.PHIEUNHAP" Width="1.5" PointX="8.25" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.PHIEUXUAT" Width="1.5" PointX="8.25" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.SANPHAM" Width="1.5" PointX="8.25" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.TAIKHOAN" Width="1.5" PointX="3" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.TONKHO" Width="1.5" PointX="13.5" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.VAITRO" Width="1.5" PointX="5.25" PointY="27" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.V_BAOCAO_XUAT" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.V_NHATKY_DANGNHAP" Width="1.5" PointX="2.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.V_NHATKY_THAOTAC" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CT_KIEMKE_KIEMKEKHO" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CT_KIEMKE_SANPHAM" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CT_PHIEUNHAP_PHIEUNHAP" ManuallyRouted="false" />
@@ -33,11 +32,11 @@
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CTPX_PX" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CTPX_SP" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_SANPHAM_DONVITINH" ManuallyRouted="false" />
-        <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PX_KH" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_KIEMKEKHO_KHO" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PHANCONGKHO_KHO" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PN_KHO" ManuallyRouted="false" />
-        <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PX_KHO" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PX_KHO_NHAN" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PX_KHO_XUAT" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_TONKHO_KHO" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_KIEMKEKHO_TAIKHOAN" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_SANPHAM_LOAIHANG" ManuallyRouted="false" />

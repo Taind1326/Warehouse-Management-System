@@ -512,7 +512,11 @@ namespace Do_An.ViewModels.Admin
         {
             ResetMenu();
             IsThongKeExpanded = true;
-            // CurrentView = new UcThongKeTongQuan();
+
+            var uc = new UcTongQuanThongKe();
+            uc.DataContext = new UcTongQuanThongKeViewModel(OpenTrangChu);
+
+            CurrentView = uc;
         }
 
         // ================= TOGGLE =================

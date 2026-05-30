@@ -430,7 +430,7 @@
                                             IsReadOnly="True"
                                             ElementStyle="{StaticResource CellTextStyle}"/>
 
-                        <DataGridTextColumn Header="Người nhận"
+                        <DataGridTextColumn Header="Nơi nhận"
                                             Binding="{Binding NoiNhan}"
                                             Width="1.1*"
                                             IsReadOnly="True"

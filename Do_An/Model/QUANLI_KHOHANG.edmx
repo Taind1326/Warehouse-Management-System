@@ -43,17 +43,6 @@
           <Property Name="MADVT" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="TENDVT" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="KHACHHANG">
-          <Key>
-            <PropertyRef Name="MAKH" />
-          </Key>
-          <Property Name="MAKH" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="TENKH" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="SDT" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="DIACHI" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="EMAIL" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="TRANGTHAI" Type="bit" Nullable="false" />
-        </EntityType>
         <EntityType Name="KHO">
           <Key>
             <PropertyRef Name="MAKHO" />
@@ -149,7 +138,7 @@
           </Key>
           <Property Name="MAPX" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="MAKHO" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="MAKH" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="MAKHONHAN" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="MATK" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="NGAYXUAT" Type="datetime" Nullable="false" />
           <Property Name="TONGTIEN" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -199,8 +188,10 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_BAOCAO_XUAT' does not have a 
           <Key>
             <PropertyRef Name="MAPX" />
             <PropertyRef Name="NGAYXUAT" />
-            <PropertyRef Name="MAKH" />
-            <PropertyRef Name="TENKH" />
+            <PropertyRef Name="MAKHOXUAT" />
+            <PropertyRef Name="TENKHOXUAT" />
+            <PropertyRef Name="MAKHONHAN" />
+            <PropertyRef Name="TENKHONHAN" />
             <PropertyRef Name="MASP" />
             <PropertyRef Name="TENSP" />
             <PropertyRef Name="SOLUONG" />
@@ -209,8 +200,10 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_BAOCAO_XUAT' does not have a 
           </Key>
           <Property Name="MAPX" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="NGAYXUAT" Type="datetime" Nullable="false" />
-          <Property Name="MAKH" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="TENKH" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MAKHOXUAT" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TENKHOXUAT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MAKHONHAN" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TENKHONHAN" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="MASP" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="TENSP" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="SOLUONG" Type="int" Nullable="false" />
@@ -446,19 +439,19 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_NHATKY_THAOTAC' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PX_KH">
-          <End Role="KHACHHANG" Type="Self.KHACHHANG" Multiplicity="1" />
+        <Association Name="FK_PX_KHO_NHAN">
+          <End Role="KHO" Type="Self.KHO" Multiplicity="1" />
           <End Role="PHIEUXUAT" Type="Self.PHIEUXUAT" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="KHACHHANG">
-              <PropertyRef Name="MAKH" />
+            <Principal Role="KHO">
+              <PropertyRef Name="MAKHO" />
             </Principal>
             <Dependent Role="PHIEUXUAT">
-              <PropertyRef Name="MAKH" />
+              <PropertyRef Name="MAKHONHAN" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PX_KHO">
+        <Association Name="FK_PX_KHO_XUAT">
           <End Role="KHO" Type="Self.KHO" Multiplicity="1" />
           <End Role="PHIEUXUAT" Type="Self.PHIEUXUAT" Multiplicity="*" />
           <ReferentialConstraint>
@@ -559,7 +552,6 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_NHATKY_THAOTAC' does not have
           <EntitySet Name="CT_PHIEUNHAP" EntityType="Self.CT_PHIEUNHAP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CT_PHIEUXUAT" EntityType="Self.CT_PHIEUXUAT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DONVITINH" EntityType="Self.DONVITINH" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="KHACHHANG" EntityType="Self.KHACHHANG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KHO" EntityType="Self.KHO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KIEMKEKHO" EntityType="Self.KIEMKEKHO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LOAIHANG" EntityType="Self.LOAIHANG" Schema="dbo" store:Type="Tables" />
@@ -578,8 +570,10 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_NHATKY_THAOTAC' does not have
             <DefiningQuery>SELECT 
 [V_BAOCAO_XUAT].[MAPX] AS [MAPX], 
 [V_BAOCAO_XUAT].[NGAYXUAT] AS [NGAYXUAT], 
-[V_BAOCAO_XUAT].[MAKH] AS [MAKH], 
-[V_BAOCAO_XUAT].[TENKH] AS [TENKH], 
+[V_BAOCAO_XUAT].[MAKHOXUAT] AS [MAKHOXUAT], 
+[V_BAOCAO_XUAT].[TENKHOXUAT] AS [TENKHOXUAT], 
+[V_BAOCAO_XUAT].[MAKHONHAN] AS [MAKHONHAN], 
+[V_BAOCAO_XUAT].[TENKHONHAN] AS [TENKHONHAN], 
 [V_BAOCAO_XUAT].[MASP] AS [MASP], 
 [V_BAOCAO_XUAT].[TENSP] AS [TENSP], 
 [V_BAOCAO_XUAT].[SOLUONG] AS [SOLUONG], 
@@ -676,11 +670,11 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
             <End Role="TAIKHOAN" EntitySet="TAIKHOAN" />
             <End Role="PHIEUNHAP" EntitySet="PHIEUNHAP" />
           </AssociationSet>
-          <AssociationSet Name="FK_PX_KH" Association="Self.FK_PX_KH">
-            <End Role="KHACHHANG" EntitySet="KHACHHANG" />
+          <AssociationSet Name="FK_PX_KHO_NHAN" Association="Self.FK_PX_KHO_NHAN">
+            <End Role="KHO" EntitySet="KHO" />
             <End Role="PHIEUXUAT" EntitySet="PHIEUXUAT" />
           </AssociationSet>
-          <AssociationSet Name="FK_PX_KHO" Association="Self.FK_PX_KHO">
+          <AssociationSet Name="FK_PX_KHO_XUAT" Association="Self.FK_PX_KHO_XUAT">
             <End Role="KHO" EntitySet="KHO" />
             <End Role="PHIEUXUAT" EntitySet="PHIEUXUAT" />
           </AssociationSet>
@@ -763,18 +757,6 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           <Property Name="TENDVT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="SANPHAMs" Relationship="Self.FK_SANPHAM_DONVITINH" FromRole="DONVITINH" ToRole="SANPHAM" />
         </EntityType>
-        <EntityType Name="KHACHHANG">
-          <Key>
-            <PropertyRef Name="MAKH" />
-          </Key>
-          <Property Name="MAKH" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="TENKH" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SDT" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="DIACHI" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="EMAIL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TRANGTHAI" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="PHIEUXUATs" Relationship="Self.FK_PX_KH" FromRole="KHACHHANG" ToRole="PHIEUXUAT" />
-        </EntityType>
         <EntityType Name="KHO">
           <Key>
             <PropertyRef Name="MAKHO" />
@@ -786,7 +768,8 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           <NavigationProperty Name="KIEMKEKHOes" Relationship="Self.FK_KIEMKEKHO_KHO" FromRole="KHO" ToRole="KIEMKEKHO" />
           <NavigationProperty Name="PHANCONG_KHO" Relationship="Self.FK_PHANCONGKHO_KHO" FromRole="KHO" ToRole="PHANCONG_KHO" />
           <NavigationProperty Name="PHIEUNHAPs" Relationship="Self.FK_PN_KHO" FromRole="KHO" ToRole="PHIEUNHAP" />
-          <NavigationProperty Name="PHIEUXUATs" Relationship="Self.FK_PX_KHO" FromRole="KHO" ToRole="PHIEUXUAT" />
+          <NavigationProperty Name="PHIEUXUATs" Relationship="Self.FK_PX_KHO_NHAN" FromRole="KHO" ToRole="PHIEUXUAT" />
+          <NavigationProperty Name="PHIEUXUATs1" Relationship="Self.FK_PX_KHO_XUAT" FromRole="KHO" ToRole="PHIEUXUAT" />
           <NavigationProperty Name="TONKHOes" Relationship="Self.FK_TONKHO_KHO" FromRole="KHO" ToRole="TONKHO" />
         </EntityType>
         <EntityType Name="KIEMKEKHO">
@@ -881,14 +864,14 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           </Key>
           <Property Name="MAPX" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="MAKHO" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="MAKH" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="MAKHONHAN" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="MATK" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="NGAYXUAT" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="TONGTIEN" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="TRANGTHAI" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="CT_PHIEUXUAT" Relationship="Self.FK_CTPX_PX" FromRole="PHIEUXUAT" ToRole="CT_PHIEUXUAT" />
-          <NavigationProperty Name="KHACHHANG" Relationship="Self.FK_PX_KH" FromRole="PHIEUXUAT" ToRole="KHACHHANG" />
-          <NavigationProperty Name="KHO" Relationship="Self.FK_PX_KHO" FromRole="PHIEUXUAT" ToRole="KHO" />
+          <NavigationProperty Name="KHO" Relationship="Self.FK_PX_KHO_NHAN" FromRole="PHIEUXUAT" ToRole="KHO" />
+          <NavigationProperty Name="KHO1" Relationship="Self.FK_PX_KHO_XUAT" FromRole="PHIEUXUAT" ToRole="KHO" />
           <NavigationProperty Name="TAIKHOAN" Relationship="Self.FK_PX_TAIKHOAN" FromRole="PHIEUXUAT" ToRole="TAIKHOAN" />
         </EntityType>
         <EntityType Name="SANPHAM">
@@ -950,8 +933,10 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           <Key>
             <PropertyRef Name="MAPX" />
             <PropertyRef Name="NGAYXUAT" />
-            <PropertyRef Name="MAKH" />
-            <PropertyRef Name="TENKH" />
+            <PropertyRef Name="MAKHOXUAT" />
+            <PropertyRef Name="TENKHOXUAT" />
+            <PropertyRef Name="MAKHONHAN" />
+            <PropertyRef Name="TENKHONHAN" />
             <PropertyRef Name="MASP" />
             <PropertyRef Name="TENSP" />
             <PropertyRef Name="SOLUONG" />
@@ -960,8 +945,10 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           </Key>
           <Property Name="MAPX" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="NGAYXUAT" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="MAKH" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="TENKH" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MAKHOXUAT" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TENKHOXUAT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MAKHONHAN" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TENKHONHAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="MASP" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="TENSP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SOLUONG" Type="Int32" Nullable="false" />
@@ -1085,18 +1072,6 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PX_KH">
-          <End Role="KHACHHANG" Type="Self.KHACHHANG" Multiplicity="1" />
-          <End Role="PHIEUXUAT" Type="Self.PHIEUXUAT" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KHACHHANG">
-              <PropertyRef Name="MAKH" />
-            </Principal>
-            <Dependent Role="PHIEUXUAT">
-              <PropertyRef Name="MAKH" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_KIEMKEKHO_KHO">
           <End Role="KHO" Type="Self.KHO" Multiplicity="1" />
           <End Role="KIEMKEKHO" Type="Self.KIEMKEKHO" Multiplicity="*" />
@@ -1133,7 +1108,19 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PX_KHO">
+        <Association Name="FK_PX_KHO_NHAN">
+          <End Role="KHO" Type="Self.KHO" Multiplicity="1" />
+          <End Role="PHIEUXUAT" Type="Self.PHIEUXUAT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KHO">
+              <PropertyRef Name="MAKHO" />
+            </Principal>
+            <Dependent Role="PHIEUXUAT">
+              <PropertyRef Name="MAKHONHAN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PX_KHO_XUAT">
           <End Role="KHO" Type="Self.KHO" Multiplicity="1" />
           <End Role="PHIEUXUAT" Type="Self.PHIEUXUAT" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1286,7 +1273,6 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           <EntitySet Name="CT_PHIEUNHAP" EntityType="Self.CT_PHIEUNHAP" />
           <EntitySet Name="CT_PHIEUXUAT" EntityType="Self.CT_PHIEUXUAT" />
           <EntitySet Name="DONVITINHs" EntityType="Self.DONVITINH" />
-          <EntitySet Name="KHACHHANGs" EntityType="Self.KHACHHANG" />
           <EntitySet Name="KHOes" EntityType="Self.KHO" />
           <EntitySet Name="KIEMKEKHOes" EntityType="Self.KIEMKEKHO" />
           <EntitySet Name="LOAIHANGs" EntityType="Self.LOAIHANG" />
@@ -1331,10 +1317,6 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
             <End Role="DONVITINH" EntitySet="DONVITINHs" />
             <End Role="SANPHAM" EntitySet="SANPHAMs" />
           </AssociationSet>
-          <AssociationSet Name="FK_PX_KH" Association="Self.FK_PX_KH">
-            <End Role="KHACHHANG" EntitySet="KHACHHANGs" />
-            <End Role="PHIEUXUAT" EntitySet="PHIEUXUATs" />
-          </AssociationSet>
           <AssociationSet Name="FK_KIEMKEKHO_KHO" Association="Self.FK_KIEMKEKHO_KHO">
             <End Role="KHO" EntitySet="KHOes" />
             <End Role="KIEMKEKHO" EntitySet="KIEMKEKHOes" />
@@ -1347,7 +1329,11 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
             <End Role="KHO" EntitySet="KHOes" />
             <End Role="PHIEUNHAP" EntitySet="PHIEUNHAPs" />
           </AssociationSet>
-          <AssociationSet Name="FK_PX_KHO" Association="Self.FK_PX_KHO">
+          <AssociationSet Name="FK_PX_KHO_NHAN" Association="Self.FK_PX_KHO_NHAN">
+            <End Role="KHO" EntitySet="KHOes" />
+            <End Role="PHIEUXUAT" EntitySet="PHIEUXUATs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PX_KHO_XUAT" Association="Self.FK_PX_KHO_XUAT">
             <End Role="KHO" EntitySet="KHOes" />
             <End Role="PHIEUXUAT" EntitySet="PHIEUXUATs" />
           </AssociationSet>
@@ -1445,18 +1431,6 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="KHACHHANGs">
-            <EntityTypeMapping TypeName="QUANLI_KHOHANGModel.KHACHHANG">
-              <MappingFragment StoreEntitySet="KHACHHANG">
-                <ScalarProperty Name="MAKH" ColumnName="MAKH" />
-                <ScalarProperty Name="TENKH" ColumnName="TENKH" />
-                <ScalarProperty Name="SDT" ColumnName="SDT" />
-                <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
-                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
-                <ScalarProperty Name="TRANGTHAI" ColumnName="TRANGTHAI" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="KHOes">
             <EntityTypeMapping TypeName="QUANLI_KHOHANGModel.KHO">
               <MappingFragment StoreEntitySet="KHO">
@@ -1550,7 +1524,7 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
               <MappingFragment StoreEntitySet="PHIEUXUAT">
                 <ScalarProperty Name="MAPX" ColumnName="MAPX" />
                 <ScalarProperty Name="MAKHO" ColumnName="MAKHO" />
-                <ScalarProperty Name="MAKH" ColumnName="MAKH" />
+                <ScalarProperty Name="MAKHONHAN" ColumnName="MAKHONHAN" />
                 <ScalarProperty Name="MATK" ColumnName="MATK" />
                 <ScalarProperty Name="NGAYXUAT" ColumnName="NGAYXUAT" />
                 <ScalarProperty Name="TONGTIEN" ColumnName="TONGTIEN" />
@@ -1604,8 +1578,10 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
               <MappingFragment StoreEntitySet="V_BAOCAO_XUAT">
                 <ScalarProperty Name="MAPX" ColumnName="MAPX" />
                 <ScalarProperty Name="NGAYXUAT" ColumnName="NGAYXUAT" />
-                <ScalarProperty Name="MAKH" ColumnName="MAKH" />
-                <ScalarProperty Name="TENKH" ColumnName="TENKH" />
+                <ScalarProperty Name="MAKHOXUAT" ColumnName="MAKHOXUAT" />
+                <ScalarProperty Name="TENKHOXUAT" ColumnName="TENKHOXUAT" />
+                <ScalarProperty Name="MAKHONHAN" ColumnName="MAKHONHAN" />
+                <ScalarProperty Name="TENKHONHAN" ColumnName="TENKHONHAN" />
                 <ScalarProperty Name="MASP" ColumnName="MASP" />
                 <ScalarProperty Name="TENSP" ColumnName="TENSP" />
                 <ScalarProperty Name="SOLUONG" ColumnName="SOLUONG" />

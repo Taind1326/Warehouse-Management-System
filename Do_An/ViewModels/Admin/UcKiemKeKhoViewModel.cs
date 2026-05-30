@@ -186,7 +186,6 @@ namespace Do_An.ViewModels.Admin
             _moForm?.Invoke();
         }
 
-
         private void VeTrangChu()
         {
             _veTrangChu?.Invoke();
@@ -207,6 +206,12 @@ namespace Do_An.ViewModels.Admin
                 if (SelectedItem.TrangThai == "Đã kiểm" && !laAdmin)
                 {
                     MessageBox.Show("Nhân viên chỉ được sửa phiếu lưu tạm!");
+                    return;
+                }
+
+                if (SelectedItem.TrangThai == "Đã hủy")
+                {
+                    MessageBox.Show("Phiếu đã hủy không được sửa!");
                     return;
                 }
             }
@@ -250,17 +255,20 @@ namespace Do_An.ViewModels.Admin
 
                 var ds = db.SANPHAMs
                     .ToList()
-                    .Select((sp, index) => new ChiTietKiemItem(CapNhatTongLech)
+                    .Select((sp, index) =>
                     {
-                        STT = index + 1,
-                        MaSanPham = sp.MASP,
-                        TenSanPham = sp.TENSP,
-                        SoLuongHeThong = sp.TONKHOes
+                        int soLuongTon = sp.TONKHOes
                             .Where(t => string.IsNullOrWhiteSpace(maKho) || t.MAKHO == maKho)
-                            .Sum(t => t.SOLUONGTON),
-                        SoLuongThucTe = sp.TONKHOes
-                            .Where(t => string.IsNullOrWhiteSpace(maKho) || t.MAKHO == maKho)
-                            .Sum(t => t.SOLUONGTON)
+                            .Sum(t => t.SOLUONGTON);
+
+                        return new ChiTietKiemItem(CapNhatTongLech)
+                        {
+                            STT = index + 1,
+                            MaSanPham = sp.MASP,
+                            TenSanPham = sp.TENSP,
+                            SoLuongHeThong = soLuongTon,
+                            SoLuongThucTe = soLuongTon
+                        };
                     })
                     .ToList();
 
@@ -296,7 +304,7 @@ namespace Do_An.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lưu phiếu kiểm thất bại!\n" + ex.Message);
+                MessageBox.Show("Lưu phiếu kiểm thất bại!\n" + LayLoiChiTiet(ex));
             }
         }
 
@@ -305,10 +313,12 @@ namespace Do_An.ViewModels.Admin
             if (db.KIEMKEKHOes.Any(x => x.MAKIEMKE == MaKiemKe))
                 throw new Exception("Mã phiếu kiểm đã tồn tại!");
 
+            string maKho = LayMaKho(db);
+
             var kk = new KIEMKEKHO
             {
                 MAKIEMKE = MaKiemKe,
-                MAKHO = LayMaKho(db),
+                MAKHO = maKho,
                 MATK = LayMaTaiKhoan(db),
                 NGAYKIEMKE = NgayKiemKe,
                 TRANGTHAI = trangThai,
@@ -324,12 +334,14 @@ namespace Do_An.ViewModels.Admin
                     MAKIEMKE = MaKiemKe,
                     MASP = item.MaSanPham,
                     SOLUONGHETHONG = item.SoLuongHeThong,
-                    SOLUONGTHUCTE = item.SoLuongThucTe,
-                    CHENHLECH = item.ChenhLech
+                    SOLUONGTHUCTE = item.SoLuongThucTe
                 });
             }
 
-            GhiLog(db, "Tạo phiếu kiểm", MaKiemKe, "Tạo phiếu kiểm " + MaKiemKe);
+            if (trangThai == "Đã kiểm")
+                CapNhatTonKhoSauKiemKe(db, maKho);
+
+            GhiLog(db, "Tạo phiếu kiểm kê", MaKiemKe, "Tạo phiếu kiểm kê" + MaKiemKe);
         }
 
         private void SuaPhieuKiem(QUANLI_KHOHANGEntities db, string trangThai)
@@ -339,7 +351,12 @@ namespace Do_An.ViewModels.Admin
             if (kk == null)
                 throw new Exception("Không tìm thấy phiếu kiểm cần sửa!");
 
-            kk.MAKHO = LayMaKho(db);
+            if (kk.TRANGTHAI == "Đã hủy")
+                throw new Exception("Phiếu đã hủy không được sửa!");
+
+            string maKho = LayMaKho(db);
+
+            kk.MAKHO = maKho;
             kk.MATK = LayMaTaiKhoan(db);
             kk.NGAYKIEMKE = NgayKiemKe;
             kk.TRANGTHAI = trangThai;
@@ -359,12 +376,54 @@ namespace Do_An.ViewModels.Admin
                     MAKIEMKE = MaKiemKe,
                     MASP = item.MaSanPham,
                     SOLUONGHETHONG = item.SoLuongHeThong,
-                    SOLUONGTHUCTE = item.SoLuongThucTe,
-                    CHENHLECH = item.ChenhLech
+                    SOLUONGTHUCTE = item.SoLuongThucTe
                 });
             }
 
-            GhiLog(db, "Sửa phiếu kiểm", MaKiemKe, "Sửa phiếu kiểm " + MaKiemKe);
+            if (trangThai == "Đã kiểm")
+                CapNhatTonKhoSauKiemKe(db, maKho);
+
+            GhiLog(db, "Sửa phiếu kiểm kê", MaKiemKe, "Sửa phiếu kiểm kê" + MaKiemKe);
+        }
+
+        private string LayLoiChiTiet(Exception ex)
+        {
+            string loi = ex.Message;
+
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                loi += "\n" + ex.Message;
+            }
+
+            return loi;
+        }
+
+        private void CapNhatTonKhoSauKiemKe(QUANLI_KHOHANGEntities db, string maKho)
+        {
+            foreach (var item in DanhSachChiTietKiem)
+            {
+                if (item.SoLuongThucTe < 0)
+                    throw new Exception("Số lượng thực tế của sản phẩm " + item.TenSanPham + " không được âm!");
+
+                var tonKho = db.TONKHOes.FirstOrDefault(x =>
+                    x.MAKHO == maKho &&
+                    x.MASP == item.MaSanPham);
+
+                if (tonKho == null)
+                {
+                    tonKho = new TONKHO
+                    {
+                        MAKHO = maKho,
+                        MASP = item.MaSanPham,
+                        SOLUONGTON = 0
+                    };
+
+                    db.TONKHOes.Add(tonKho);
+                }
+
+                tonKho.SOLUONGTON = item.SoLuongThucTe;
+            }
         }
 
         private void XoaPhieuKiem()
@@ -409,7 +468,7 @@ namespace Do_An.ViewModels.Admin
 
                         GhiLog(
                             db,
-                            "Hủy phiếu kiểm",
+                            "Hủy phiếu kiểm kê",
                             kk.MAKIEMKE,
                             "Chuyển phiếu đã kiểm sang trạng thái Đã hủy");
 
@@ -433,9 +492,9 @@ namespace Do_An.ViewModels.Admin
 
                         GhiLog(
                             db,
-                            "Xóa phiếu kiểm",
+                            "Xóa phiếu kiểm kê",
                             kk.MAKIEMKE,
-                            "Xóa phiếu kiểm lưu tạm");
+                            "Xóa phiếu kiểm kê lưu tạm");
 
                         db.SaveChanges();
 
@@ -479,6 +538,15 @@ namespace Do_An.ViewModels.Admin
             {
                 MessageBox.Show("Danh sách chi tiết kiểm kho đang trống!");
                 return false;
+            }
+
+            foreach (var item in DanhSachChiTietKiem)
+            {
+                if (item.SoLuongThucTe < 0)
+                {
+                    MessageBox.Show("Số lượng thực tế của sản phẩm " + item.TenSanPham + " không được âm!");
+                    return false;
+                }
             }
 
             return true;

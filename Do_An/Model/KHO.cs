@@ -20,6 +20,7 @@ namespace Do_An.Model
             this.PHANCONG_KHO = new HashSet<PHANCONG_KHO>();
             this.PHIEUNHAPs = new HashSet<PHIEUNHAP>();
             this.PHIEUXUATs = new HashSet<PHIEUXUAT>();
+            this.PHIEUXUATs1 = new HashSet<PHIEUXUAT>();
             this.TONKHOes = new HashSet<TONKHO>();
         }
     
@@ -32,6 +33,7 @@ namespace Do_An.Model
         public virtual ICollection<PHANCONG_KHO> PHANCONG_KHO { get; set; }
         public virtual ICollection<PHIEUNHAP> PHIEUNHAPs { get; set; }
         public virtual ICollection<PHIEUXUAT> PHIEUXUATs { get; set; }
+        public virtual ICollection<PHIEUXUAT> PHIEUXUATs1 { get; set; }
         public virtual ICollection<TONKHO> TONKHOes { get; set; }
     }
 }

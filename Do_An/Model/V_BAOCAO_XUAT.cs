@@ -16,8 +16,10 @@ namespace Do_An.Model
     {
         public string MAPX { get; set; }
         public System.DateTime NGAYXUAT { get; set; }
-        public string MAKH { get; set; }
-        public string TENKH { get; set; }
+        public string MAKHOXUAT { get; set; }
+        public string TENKHOXUAT { get; set; }
+        public string MAKHONHAN { get; set; }
+        public string TENKHONHAN { get; set; }
         public string MASP { get; set; }
         public string TENSP { get; set; }
         public int SOLUONG { get; set; }

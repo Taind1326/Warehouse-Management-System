@@ -395,7 +395,10 @@
                                   IsExpanded="{Binding IsThongKeExpanded, Mode=TwoWay}">
                             
                             <StackPanel>
-                                <Button Style="{StaticResource SubMenuButtonStyle}" Content="• Tổng quan"/>
+                                <Button Style="{StaticResource SubMenuButtonStyle}" 
+                                        Command="{Binding OpenThongKeCommand}"
+                                        Content="• Tổng quan"/>
+                                
                                 <Button Style="{StaticResource SubMenuButtonStyle}" Content="• Thống kê nhập kho"/>
                                 <Button Style="{StaticResource SubMenuButtonStyle}" Content="• Thống kê xuất kho"/>
                                 <Button Style="{StaticResource SubMenuButtonStyle}" Content="• Thống kê tồn kho"/>

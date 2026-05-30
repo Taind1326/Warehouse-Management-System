@@ -29,7 +29,6 @@ namespace Do_An.Model
         public DbSet<CT_PHIEUNHAP> CT_PHIEUNHAP { get; set; }
         public DbSet<CT_PHIEUXUAT> CT_PHIEUXUAT { get; set; }
         public DbSet<DONVITINH> DONVITINHs { get; set; }
-        public DbSet<KHACHHANG> KHACHHANGs { get; set; }
         public DbSet<KHO> KHOes { get; set; }
         public DbSet<KIEMKEKHO> KIEMKEKHOes { get; set; }
         public DbSet<LOAIHANG> LOAIHANGs { get; set; }

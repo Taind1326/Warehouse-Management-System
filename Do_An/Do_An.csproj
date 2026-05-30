@@ -81,9 +81,6 @@
     <Compile Include="Model\DONVITINH.cs">
       <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\KHACHHANG.cs">
-      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\KHO.cs">
       <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
     </Compile>
@@ -154,6 +151,7 @@
     <Compile Include="ViewModels\Admin\UcLoaiHangViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcNhapKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcNhaSanXuatViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcTongQuanThongKeViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcTonKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcXuatKhoViewModel.cs" />
     <Compile Include="ViewModels\KeToan\KeToanViewModel.cs" />
@@ -211,6 +209,9 @@
     </Compile>
     <Compile Include="View\Admin\UcThemSuaNhaSanXuat.xaml.cs">
       <DependentUpon>UcThemSuaNhaSanXuat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcTongQuanThongKe.xaml.cs">
+      <DependentUpon>UcTongQuanThongKe.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Admin\UcTonKho.xaml.cs">
       <DependentUpon>UcTonKho.xaml</DependentUpon>
@@ -367,6 +368,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Admin\UcTongQuanThongKe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Admin\UcTonKho.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -455,6 +460,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Model\QUANLI_KHOHANG.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -42,6 +42,9 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.82"/>
                             </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -98,15 +101,6 @@
             <Setter Property="Background" Value="White"/>
         </Style>
 
-        <Style x:Key="FormDatePickerStyle" TargetType="DatePicker">
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-
     </UserControl.Resources>
 
     <Grid Background="#FFF8F5F3">
@@ -114,12 +108,12 @@
                       HorizontalScrollBarVisibility="Disabled">
 
             <Border Margin="18"
-                Padding="24"
-                Background="White"
-                BorderBrush="{StaticResource CardBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="20"
-                VerticalAlignment="Top">
+                    Padding="24"
+                    Background="White"
+                    BorderBrush="{StaticResource CardBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="20"
+                    VerticalAlignment="Top">
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -130,18 +124,20 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
+                    <!-- ===== Header ===== -->
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="{Binding TieuDe, FallbackValue=THÊM HÀNG HÓA}"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource PrimaryTextBrush}"/>
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
 
-                        <TextBlock Text="Nhập thông tin hàng hóa bên dưới. Những mục có dấu * là bắt buộc."
-                               Margin="0,8,0,0"
-                               FontSize="14"
-                               Foreground="{StaticResource SecondaryTextBrush}"/>
+                        <TextBlock Text="Nhập thông tin sản phẩm. Số lượng tồn kho sẽ được cập nhật qua phiếu nhập, phiếu xuất và kiểm kê."
+                                   Margin="0,8,0,0"
+                                   FontSize="14"
+                                   Foreground="{StaticResource SecondaryTextBrush}"/>
                     </StackPanel>
 
+                    <!-- ===== Form ===== -->
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -161,116 +157,156 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
+                        <!-- Mã hàng -->
                         <StackPanel Grid.Row="0" Grid.Column="0">
-                            <TextBlock Text="Mã hàng *" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="44" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
+                            <TextBlock Text="Mã hàng *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+
                                 <TextBox Style="{StaticResource FormTextBoxStyle}"
-                                     Text="{Binding MaHang, UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="{Binding IsEdit}"/>
+                                         Text="{Binding MaHang, UpdateSourceTrigger=PropertyChanged}"
+                                         IsReadOnly="{Binding IsEdit}"/>
                             </Border>
                         </StackPanel>
 
+                        <!-- Tên hàng -->
                         <StackPanel Grid.Row="0" Grid.Column="2">
-                            <TextBlock Text="Tên hàng *" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="44" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
+                            <TextBlock Text="Tên hàng *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+
                                 <TextBox Style="{StaticResource FormTextBoxStyle}"
-                                     Text="{Binding TenHang, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding TenHang, UpdateSourceTrigger=PropertyChanged}"/>
                             </Border>
                         </StackPanel>
 
+                        <!-- Loại hàng -->
                         <StackPanel Grid.Row="2" Grid.Column="0">
-                            <TextBlock Text="Loại hàng *" Style="{StaticResource FormLabelStyle}"/>
+                            <TextBlock Text="Loại hàng *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
                             <ComboBox Style="{StaticResource FormComboBoxStyle}"
-                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
-                                  ItemsSource="{Binding DanhSachLoaiHang}"
-                                  SelectedItem="{Binding TenLoaiHang, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  IsSynchronizedWithCurrentItem="False"/>
+                                      ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                      ItemsSource="{Binding DanhSachLoaiHang}"
+                                      SelectedItem="{Binding TenLoaiHang, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      IsSynchronizedWithCurrentItem="False"/>
                         </StackPanel>
 
+                        <!-- Nhà sản xuất -->
                         <StackPanel Grid.Row="2" Grid.Column="2">
-                            <TextBlock Text="Nhà sản xuất *" Style="{StaticResource FormLabelStyle}"/>
+                            <TextBlock Text="Nhà sản xuất *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
                             <ComboBox Style="{StaticResource FormComboBoxStyle}"
-                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
-                                  ItemsSource="{Binding DanhSachNSX}"
-                                  SelectedItem="{Binding TenNSX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  IsSynchronizedWithCurrentItem="False"/>
+                                      ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                      ItemsSource="{Binding DanhSachNSX}"
+                                      SelectedItem="{Binding TenNSX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      IsSynchronizedWithCurrentItem="False"/>
                         </StackPanel>
 
+                        <!-- Đơn vị tính -->
                         <StackPanel Grid.Row="4" Grid.Column="0">
-                            <TextBlock Text="Đơn vị tính *" Style="{StaticResource FormLabelStyle}"/>
+                            <TextBlock Text="Đơn vị tính *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
                             <ComboBox Style="{StaticResource FormComboBoxStyle}"
-                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
-                                  ItemsSource="{Binding DanhSachDonViTinh}"
-                                  SelectedItem="{Binding DonViTinh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  IsSynchronizedWithCurrentItem="False"/>
+                                      ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                      ItemsSource="{Binding DanhSachDonViTinh}"
+                                      SelectedItem="{Binding DonViTinh, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      IsSynchronizedWithCurrentItem="False"/>
                         </StackPanel>
 
+                        <!-- Giá nhập -->
                         <StackPanel Grid.Row="4" Grid.Column="2">
-                            <TextBlock Text="Giá nhập *" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="44" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
+                            <TextBlock Text="Giá nhập *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+
                                 <TextBox Style="{StaticResource FormTextBoxStyle}"
-                                     Text="{Binding GiaNhap, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding GiaNhap, UpdateSourceTrigger=PropertyChanged}"/>
                             </Border>
                         </StackPanel>
 
+                        <!-- Số lượng tối thiểu -->
                         <StackPanel Grid.Row="6" Grid.Column="0">
-                            <TextBlock Text="Số lượng ban đầu *" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="44" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
+                            <TextBlock Text="Số lượng tối thiểu *"
+                                       Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+
                                 <TextBox Style="{StaticResource FormTextBoxStyle}"
-                                     Text="{Binding SoLuongTon, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding SoLuongToiThieu, UpdateSourceTrigger=PropertyChanged}"/>
                             </Border>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="6" Grid.Column="2">
-                            <TextBlock Text="Số lượng tối thiểu" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="44" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
-                                <TextBox Style="{StaticResource FormTextBoxStyle}"
-                                     Text="{Binding SoLuongToiThieu, UpdateSourceTrigger=PropertyChanged}"/>
-                            </Border>
-                        </StackPanel>
+                        <!-- Ghi chú -->
+                        <StackPanel Grid.Row="6" Grid.Column="2"
+                                    Grid.RowSpan="3">
+                            <TextBlock Text="Mô tả / ghi chú"
+                                       Style="{StaticResource FormLabelStyle}"/>
 
-                        <StackPanel Grid.Row="8" Grid.Column="0">
-                            <TextBlock Text="Ngày nhập" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="44" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
-                                <DatePicker Style="{StaticResource FormDatePickerStyle}"
-                                        SelectedDate="{Binding NgayNhap, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        Language="vi-VN"
-                                        VerticalAlignment="Center"
-                                        Margin="10,0,10,0"/>
-                            </Border>
-                        </StackPanel>
+                            <Border Height="92"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
 
-                        <StackPanel Grid.Row="8" Grid.Column="2">
-                            <TextBlock Text="Mô tả / ghi chú" Style="{StaticResource FormLabelStyle}"/>
-                            <Border Height="92" Background="{StaticResource InputBackgroundBrush}"
-                                BorderBrush="{StaticResource InputBorderBrush}" BorderThickness="1" CornerRadius="16">
                                 <TextBox Style="{StaticResource FormNoteTextBoxStyle}"
-                                     Text="{Binding GhiChu, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding GhiChu, UpdateSourceTrigger=PropertyChanged}"/>
                             </Border>
                         </StackPanel>
 
+                        <!-- Ghi chú nghiệp vụ -->
+                        <Border Grid.Row="8"
+                                Grid.Column="0"
+                                Background="#FFF8F2EF"
+                                BorderBrush="#FFE8DCD5"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="14,10"
+                                Margin="0,0,0,0">
+
+                            <TextBlock Text="Lưu ý: Hàng hóa mới sẽ có tồn kho mặc định là 0. Muốn tăng số lượng tồn, hãy tạo phiếu nhập kho."
+                                       TextWrapping="Wrap"
+                                       FontSize="13"
+                                       Foreground="{StaticResource SecondaryTextBrush}"/>
+                        </Border>
                     </Grid>
 
+                    <!-- ===== Buttons ===== -->
                     <StackPanel Grid.Row="4"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right">
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
 
                         <Button Content="Lưu"
-                            Style="{StaticResource FormButtonStyle}"
-                            Background="{StaticResource SaveButtonBrush}"
-                            Command="{Binding LuuCommand}"/>
+                                Style="{StaticResource FormButtonStyle}"
+                                Background="{StaticResource SaveButtonBrush}"
+                                Command="{Binding LuuCommand}"/>
 
                         <Button Content="Hủy"
-                            Margin="40,0,0,0"
-                            Style="{StaticResource FormButtonStyle}"
-                            Background="{StaticResource CancelButtonBrush}"
-                            Command="{Binding HuyCommand}"/>
+                                Margin="40,0,0,0"
+                                Style="{StaticResource FormButtonStyle}"
+                                Background="{StaticResource CancelButtonBrush}"
+                                Command="{Binding HuyCommand}"/>
                     </StackPanel>
                 </Grid>
             </Border>
