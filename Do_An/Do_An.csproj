@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{99078967-C899-4D04-9657-4E3CA1DB6CEF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Do_An</RootNamespace>
+    <AssemblyName>Do_An</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\BaseViewModel.cs" />
+    <Compile Include="Helper\CurrentUser.cs" />
+    <Compile Include="Helper\RelayCommand.cs" />
+    <Compile Include="Model\CT_KIEMKE.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CT_PHIEUNHAP.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CT_PHIEUXUAT.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DONVITINH.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\KHACHHANG.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\KHO.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\KIEMKEKHO.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\LOAIHANG.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\NHANVIEN.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\NHASANXUAT.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\NHATKY.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PHANCONG_KHO.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PHIEUNHAP.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PHIEUXUAT.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\QUANLI_KHOHANG.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QUANLI_KHOHANG.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\QUANLI_KHOHANG.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\QUANLI_KHOHANG.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QUANLI_KHOHANG.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\SANPHAM.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TAIKHOAN.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TONKHO.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\VAITRO.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\V_BAOCAO_XUAT.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\V_NHATKY_DANGNHAP.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\V_NHATKY_THAOTAC.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Admin\AdminViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcHangHoaViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcKhoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcKiemKeKhoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcLoaiHangViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcNhapKhoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcNhaSanXuatViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcTonKhoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcXuatKhoViewModel.cs" />
+    <Compile Include="ViewModels\KeToan\KeToanViewModel.cs" />
+    <Compile Include="ViewModels\NhanVienKho\UcHangHoaViewModel.cs" />
+    <Compile Include="ViewModels\NhanVienKho\UcKhoViewModel.cs" />
+    <Compile Include="ViewModels\NhanVienKho\UcLichSuKiemKeKhoViewModel.cs" />
+    <Compile Include="ViewModels\NhanVienKho\UcLichSuNhapKhoViewModel.cs" />
+    <Compile Include="ViewModels\NhanVienKho\UcLichSuXuatKhoViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcDoiMatKhauViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcThongTinViewModel.cs" />
+    <Compile Include="ViewModels\Windows\LoginViewModel.cs" />
+    <Compile Include="ViewModels\NhanVienKho\NhanVienKhoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcNhanVienViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcNhatKyLoginViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcNhatKyThaoTacViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcTaiKhoanViewModel.cs" />
+    <Compile Include="View\Admin\Admin.xaml.cs">
+      <DependentUpon>Admin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcHangHoa.xaml.cs">
+      <DependentUpon>UcHangHoa.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcKho.xaml.cs">
+      <DependentUpon>UcKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcKiemKeKho.xaml.cs">
+      <DependentUpon>UcKiemKeKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcLoaiHang.xaml.cs">
+      <DependentUpon>UcLoaiHang.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcNhapKho.xaml.cs">
+      <DependentUpon>UcNhapKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcNhaSanXuat.xaml.cs">
+      <DependentUpon>UcNhaSanXuat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcPhieuKiemKe.xaml.cs">
+      <DependentUpon>UcPhieuKiemKe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcPhieuNhap.xaml.cs">
+      <DependentUpon>UcPhieuNhap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcPhieuXuat.xaml.cs">
+      <DependentUpon>UcPhieuXuat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThemSuaHangHoa.xaml.cs">
+      <DependentUpon>UcThemSuaHangHoa.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThemSuaKho.xaml.cs">
+      <DependentUpon>UcThemSuaKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThemSuaLoaiHang.xaml.cs">
+      <DependentUpon>UcThemSuaLoaiHang.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThemSuaNhaSanXuat.xaml.cs">
+      <DependentUpon>UcThemSuaNhaSanXuat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcTonKho.xaml.cs">
+      <DependentUpon>UcTonKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcXuatKho.xaml.cs">
+      <DependentUpon>UcXuatKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\KeToan\KeToan.xaml.cs">
+      <DependentUpon>KeToan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\UcHangHoa.xaml.cs">
+      <DependentUpon>UcHangHoa.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\UcKho.xaml.cs">
+      <DependentUpon>UcKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\UcLichSuKiemKeKho.xaml.cs">
+      <DependentUpon>UcLichSuKiemKeKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\UcLichSuNhapKho.xaml.cs">
+      <DependentUpon>UcLichSuNhapKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\UcLichSuXuatKho.xaml.cs">
+      <DependentUpon>UcLichSuXuatKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Shared\UcDoiMatKhau.xaml.cs">
+      <DependentUpon>UcDoiMatKhau.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Shared\UcThongTin.xaml.cs">
+      <DependentUpon>UcThongTin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Windows\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\NhanVienKho.xaml.cs">
+      <DependentUpon>NhanVienKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcNhanVien.xaml.cs">
+      <DependentUpon>UcNhanVien.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcNhatKyLogin.xaml.cs">
+      <DependentUpon>UcNhatKyLogin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcNhatKyThaoTac.xaml.cs">
+      <DependentUpon>UcNhatKyThaoTac.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcTaiKhoan.xaml.cs">
+      <DependentUpon>UcTaiKhoan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThemSuaNhanVien.xaml.cs">
+      <DependentUpon>UcThemSuaNhanVien.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThemSuaTaiKhoan.xaml.cs">
+      <DependentUpon>UcThemSuaTaiKhoan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcTrangChuAdmin.xaml.cs">
+      <DependentUpon>UcTrangChuAdmin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\KeToan\UcTrangChuKeToan.xaml.cs">
+      <DependentUpon>UcTrangChuKeToan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NhanVienKho\UcTrangChuNhanVienKho.xaml.cs">
+      <DependentUpon>UcTrangChuNhanVienKho.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EntityDeploy Include="Model\QUANLI_KHOHANG.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>QUANLI_KHOHANG.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model\QUANLI_KHOHANG.edmx.diagram">
+      <DependentUpon>QUANLI_KHOHANG.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="View\Admin\Admin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcHangHoa.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcKiemKeKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcLoaiHang.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcNhapKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcNhaSanXuat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcPhieuKiemKe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcPhieuNhap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcPhieuXuat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThemSuaHangHoa.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThemSuaKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThemSuaLoaiHang.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThemSuaNhaSanXuat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcTonKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcXuatKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\KeToan\KeToan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\UcHangHoa.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\UcKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\UcLichSuKiemKeKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\UcLichSuNhapKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\UcLichSuXuatKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Shared\UcDoiMatKhau.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Shared\UcThongTin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Windows\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\NhanVienKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcNhanVien.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcNhatKyLogin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcNhatKyThaoTac.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcTaiKhoan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThemSuaNhanVien.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThemSuaTaiKhoan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcTrangChuAdmin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\KeToan\UcTrangChuKeToan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NhanVienKho\UcTrangChuNhanVienKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model\QUANLI_KHOHANG.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>QUANLI_KHOHANG.edmx</DependentUpon>
+      <LastGenOutput>QUANLI_KHOHANG.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\QUANLI_KHOHANG.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>QUANLI_KHOHANG.edmx</DependentUpon>
+      <LastGenOutput>QUANLI_KHOHANG.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

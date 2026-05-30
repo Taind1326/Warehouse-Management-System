@@ -1,0 +1,255 @@
+﻿<UserControl x:Class="Do_An.View.Admin.UcThemSuaTaiKhoan"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#FFF8F5F3">
+
+    <UserControl.Resources>
+
+        <!-- ===== Màu dùng chung ===== -->
+        <SolidColorBrush x:Key="CardBorderBrush" Color="#FFE6DAD4"/>
+        <SolidColorBrush x:Key="PrimaryTextBrush" Color="#FF5C3B31"/>
+        <SolidColorBrush x:Key="SecondaryTextBrush" Color="#FF8D7B74"/>
+        <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFAF8"/>
+        <SolidColorBrush x:Key="InputBorderBrush" Color="#FFE8DCD5"/>
+        <SolidColorBrush x:Key="SaveButtonBrush" Color="#FFB58A6A"/>
+        <SolidColorBrush x:Key="CancelButtonBrush" Color="#FF8B6251"/>
+
+        <!-- ===== Button ===== -->
+        <Style x:Key="FormButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.92"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.82"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== TextBox ===== -->
+        <Style x:Key="FormTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource PrimaryTextBrush}"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+
+        <!-- ===== ComboBox ===== -->
+        <Style x:Key="FormComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource InputBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource InputBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+
+        <Style x:Key="FormComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Background="#FFF8F5F3">
+        <Border Margin="18"
+                Padding="24"
+                Background="White"
+                BorderBrush="{StaticResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="20"
+                VerticalAlignment="Top">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="28"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- ===== Tiêu đề ===== -->
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="{Binding TieuDe}"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                    <TextBlock Text="Nhập thông tin tài khoản bên dưới. Những mục có dấu * là bắt buộc."
+                               Margin="0,8,0,0"
+                               FontSize="14"
+                               Foreground="{StaticResource SecondaryTextBrush}"/>
+                </StackPanel>
+
+                <!-- ===== Form nhập thông tin ===== -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="18"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="18"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Mã tài khoản -->
+                    <StackPanel Grid.Row="0" Grid.Column="0">
+                        <TextBlock Text="Mã tài khoản *"
+                                   Margin="4,0,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <Border Height="44"
+                                Background="{StaticResource InputBackgroundBrush}"
+                                BorderBrush="{StaticResource InputBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                            <TextBox Style="{StaticResource FormTextBoxStyle}"
+                                     Text="{Binding MaTK, UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="{Binding IsEdit}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Nhân viên -->
+                    <StackPanel Grid.Row="0" Grid.Column="2">
+                        <TextBlock Text="Nhân viên *"
+                                   Margin="4,0,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <ComboBox Style="{StaticResource FormComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                  ItemsSource="{Binding DanhSachNhanVien}"
+                                  SelectedItem="{Binding NhanVienDuocChon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="HienThi"/>
+                    </StackPanel>
+
+                    <!-- Tên tài khoản -->
+                    <StackPanel Grid.Row="2" Grid.Column="0">
+                        <TextBlock Text="Tên tài khoản *"
+                                   Margin="4,0,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <Border Height="44"
+                                Background="{StaticResource InputBackgroundBrush}"
+                                BorderBrush="{StaticResource InputBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                            <TextBox Style="{StaticResource FormTextBoxStyle}"
+                                     Text="{Binding TenTK, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Loại tài khoản -->
+                    <StackPanel Grid.Row="2" Grid.Column="2">
+                        <TextBlock Text="Loại tài khoản *"
+                                   Margin="4,0,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <ComboBox Style="{StaticResource FormComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                  SelectedValue="{Binding LoaiTaiKhoan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Tag">
+                            <ComboBoxItem Content="Nhân viên kho" Tag="NhanVienKho"/>
+                            <ComboBoxItem Content="Kế toán" Tag="KeToan"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Trạng thái -->
+                    <StackPanel Grid.Row="4" Grid.Column="0">
+                        <TextBlock Text="Trạng thái"
+                                   Margin="4,0,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <ComboBox Style="{StaticResource FormComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                  SelectedValue="{Binding TrangThai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Tag">
+                            <ComboBoxItem Content="Đang hoạt động" Tag="1"/>
+                            <ComboBoxItem Content="Không hoạt động" Tag="0"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="4" Grid.Column="2">
+                        <TextBlock Text="Chi nhánh / Kho *"
+                                   Margin="4,0,0,6"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <ComboBox Style="{StaticResource FormComboBoxStyle}"
+                                  ItemContainerStyle="{StaticResource FormComboBoxItemStyle}"
+                                  ItemsSource="{Binding DanhSachKho}"
+                                  SelectedItem="{Binding KhoDuocChon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="HienThi"/>
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- ===== Nút chức năng ===== -->
+                <StackPanel Grid.Row="4"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+
+                    <Button Content="Lưu"
+                            Style="{StaticResource FormButtonStyle}"
+                            Background="{StaticResource SaveButtonBrush}"
+                            Command="{Binding LuuCommand}"/>
+
+                    <Button Content="Hủy"
+                            Margin="40,0,0,0"
+                            Style="{StaticResource FormButtonStyle}"
+                            Background="{StaticResource CancelButtonBrush}"
+                            Command="{Binding HuyCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

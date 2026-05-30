@@ -1,0 +1,173 @@
+﻿<Window x:Class="Do_An.View.Windows.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Đăng nhập"
+        Height="550"
+        Width="450"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#FFF5F1EE">
+
+    <Grid>
+        <Border Width="380"
+                Padding="32"
+                Background="White"
+                CornerRadius="20"
+                BorderBrush="#FFE0D8D2"
+                BorderThickness="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Đăng nhập"
+                               FontFamily="Arial"
+                               FontSize="32"
+                               FontWeight="Bold"
+                               Foreground="#FF3B2F2F"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Hệ thống quản lí kho hàng"
+                               Margin="0,6,0,0"
+                               FontSize="14"
+                               Foreground="#FF8C7B75"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="Tên đăng nhập"
+                               Margin="4,0,0,6"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#FF5C4E4E"/>
+
+                    <Border Height="45"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="#FFD8CCC6"
+                            Background="#FFFCFAF8">
+                        
+                        <Grid Margin="12,0">
+                            <TextBox x:Name="txtUsername"
+                                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="14"
+                                     Foreground="#FF2F2F2F"
+                                     KeyDown="LoginInput_KeyDown"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Row="4">
+                    <TextBlock Text="Mật khẩu"
+                               Margin="4,0,0,6"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#FF5C4E4E"/>
+
+                    <Border Height="45"
+                            CornerRadius="12"
+                            BorderThickness="1"
+                            BorderBrush="#FFD8CCC6"
+                            Background="#FFFCFAF8">
+
+                        <Grid Margin="12,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="34"/>
+                            </Grid.ColumnDefinitions>
+
+                            <PasswordBox x:Name="txtPassword"
+                                         Grid.Column="0"
+                                         PasswordChanged="txtPassword_PasswordChanged"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         FontSize="14"
+                                         VerticalContentAlignment="Center"
+                                         Foreground="#FF2F2F2F"
+                                         KeyDown="LoginInput_KeyDown"/>
+
+                            <TextBox x:Name="txtPasswordVisible"
+                                     Grid.Column="0"
+                                     Visibility="Collapsed"
+                                     TextChanged="txtPasswordVisible_TextChanged"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     FontSize="14"
+                                     VerticalContentAlignment="Center"
+                                     Foreground="#FF2F2F2F"
+                                     KeyDown="LoginInput_KeyDown"/>
+
+                            <Border x:Name="btnShowPassword"
+                                    Grid.Column="1"
+                                    Width="30"
+                                    Height="30"
+                                    Margin="0,0,2,0"
+                                    Background="Transparent"
+                                    CornerRadius="8"
+                                    Cursor="Hand"
+                                    MouseLeftButtonDown="btnShowPassword_MouseLeftButtonDown">
+
+                                <TextBlock x:Name="txtEye"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           Text="&#xE722;"
+                                           FontSize="14"
+                                           Foreground="#FF8B6251"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        
+                    </Border>
+                </StackPanel>
+
+                <Button Grid.Row="6"
+                        Height="45"
+                        Content="{Binding LoginButtonText}"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        Foreground="White"
+                        Background="#FFC89F8A"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        FocusVisualStyle="{x:Null}">
+                    
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="12">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    
+                </Button>
+
+                <TextBlock Grid.Row="8"
+                           Text="Tài khoản và mật khẩu được quản trị viên cấp."
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           FontSize="13"
+                           Foreground="#FF7A6E6E"
+                           Margin="10,0,10,0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

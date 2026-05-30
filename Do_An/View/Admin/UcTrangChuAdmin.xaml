@@ -1,0 +1,469 @@
+﻿<UserControl x:Class="Do_An.View.Admin.UcTrangChuAdmin"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Do_An.View.Admin"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="900">
+
+    <UserControl.Resources>
+
+        <Style x:Key="DashboardCardButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid RenderTransform="{TemplateBinding RenderTransform}">
+                            <Border x:Name="card"
+                                    Background="White"
+                                    BorderBrush="#FFE6DAD4"
+                                    BorderThickness="1"
+                                    CornerRadius="18"
+                                    Padding="24">
+                                <ContentPresenter/>
+                            </Border>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="card" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="12"
+                                                          ShadowDepth="2"
+                                                          Opacity="0.18"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="card" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="8"
+                                                          ShadowDepth="1"
+                                                          Opacity="0.10"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AccountHeaderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.93"/>
+                </Trigger>
+
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.85"/>
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="AccountPopupButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Margin" Value="6,4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="14,0,0,0"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#FFF8F2EF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#FFEFE5E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="#FFE6DAD4"
+                BorderThickness="1"
+                CornerRadius="18"
+                Padding="24,18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="280"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Trang chủ"
+                               FontSize="31"
+                               FontWeight="Bold"
+                               Foreground="#FF4F3127"/>
+                    <TextBlock Text="Tổng quan hệ thống quản lí kho hàng"
+                               Margin="0,5,0,0"
+                               FontSize="14"
+                               Foreground="#FF8F7A71"/>
+                </StackPanel>
+
+                <Grid Grid.Column="1"
+                      Width="180"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center">
+
+                    <!-- Nút tài khoản -->
+                    <Button x:Name="btnTaiKhoan"
+                            Height="52"
+                            Background="#FFF8F2EF"
+                            BorderBrush="#FFE8DCD5"
+                            BorderThickness="1"
+                            Cursor="Hand"
+                            Padding="0"
+                            FocusVisualStyle="{x:Null}"
+                            Focusable="False"
+                            Command="{Binding ToggleMenuTaiKhoanCommand}">
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="14">
+                                    <ContentPresenter/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="16,0"
+                                    VerticalAlignment="Center">
+
+                            <TextBlock Text="👤" FontSize="16"/>
+
+                            <StackPanel Margin="10,0,0,0">
+                                <TextBlock Text="Xin chào, Admin"
+                       FontSize="13"
+                       FontWeight="SemiBold"/>
+                                <TextBlock Text="Quản trị viên"
+                       FontSize="11"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Menu tài khoản -->
+                    <Popup PlacementTarget="{Binding ElementName=btnTaiKhoan}"
+                           Placement="Bottom"
+                           StaysOpen="False"
+                           AllowsTransparency="True"
+                           PopupAnimation="Fade"
+                           IsOpen="{Binding IsMenuTaiKhoanOpen}">
+                        
+                        <Border Width="180"
+                                Margin="0,5,0,0"
+                                Background="White"
+                                BorderBrush="#FFE6DAD4"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                SnapsToDevicePixels="True">
+                            <StackPanel>
+                                <Button Content="Thông tin cá nhân"
+                                        Command="{Binding ThongTinCommand}"
+                                        Style="{StaticResource AccountPopupButtonStyle}"/>
+
+                                <Button Content="Đăng xuất"
+                                        Command="{Binding DangXuatCommand}"
+                                        Style="{StaticResource AccountPopupButtonStyle}"
+                                        Foreground="Red"/>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Thẻ thống kê -->
+        <Grid Grid.Row="1" Margin="0,18,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Style="{StaticResource DashboardCardButtonStyle}"
+                    Command="{Binding OpenNhanVienCommand}">
+                
+                <StackPanel>
+                    <TextBlock Text="Nhân viên"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#FF6B463B"/>
+                    <TextBlock Text="{Binding TongNhanVien}"
+                               Margin="0,12,0,4"
+                               FontSize="34"
+                               FontWeight="Bold"
+                               Foreground="#FF3E2723"/>
+
+                    <TextBlock Text="Số lượng nhân viên hiện có"
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="2"
+                    Style="{StaticResource DashboardCardButtonStyle}"
+                    Command="{Binding OpenKhoCommand}">
+                
+                <StackPanel>
+                    <TextBlock Text="Kho hàng"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#FF6B463B"/>
+                    
+                    <TextBlock Text="{Binding TongKho}"
+                               Margin="0,12,0,4"
+                               FontSize="34"
+                               FontWeight="Bold"
+                               Foreground="#FF3E2723"/>
+
+                    <TextBlock Text="Số kho đang hoạt động"
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="4"
+                    Style="{StaticResource DashboardCardButtonStyle}"
+                    Command="{Binding OpenHangHoaCommand}">
+                
+                <StackPanel>
+                    <TextBlock Text="Hàng hóa"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#FF6B463B"/>
+                    
+                    <TextBlock Text="{Binding TongHangHoa}"
+                               Margin="0,12,0,4"
+                               FontSize="34"
+                               FontWeight="Bold"
+                               Foreground="#FF3E2723"/>
+
+                    <TextBlock Text="Mặt hàng đang quản lí"
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="6"
+                    Style="{StaticResource DashboardCardButtonStyle}"
+                    Command="{Binding OpenThongKeCommand}">
+                
+                <StackPanel>
+                    <TextBlock Text="Thống kê"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#FF6B463B"/>
+                    
+                    <TextBlock Text="{Binding TongBaoCaoThang}"
+                               Margin="0,12,0,4"
+                               FontSize="34"
+                               FontWeight="Bold"
+                               Foreground="#FF3E2723"/>
+
+                    <TextBlock Text="Báo cáo trong tháng"
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Nội dung -->
+        <Grid Grid.Row="2" Margin="0,18,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="White"
+                    BorderBrush="#FFE6DAD4"
+                    BorderThickness="1"
+                    CornerRadius="18"
+                    Padding="24">
+                <StackPanel>
+                    <TextBlock Text="Tổng quan hệ thống"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#FF4E342E"/>
+
+                    <TextBlock Text="Đây là khu vực mặc định khi người dùng đăng nhập vào hệ thống. Sau này có thể thay phần này bằng UserControl Trang chủ hoặc các UserControl khác."
+                               Margin="0,12,0,0"
+                               FontSize="14"
+                               Foreground="#FF776760"
+                               TextWrapping="Wrap"/>
+
+                    <Border Margin="0,22,0,0"
+                            Background="#FFF9F4F1"
+                            BorderBrush="#FFE9DCD6"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="18">
+                        
+                        <StackPanel>
+                            <TextBlock Text="Gợi ý cấu trúc:"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#FF5D4037"/>
+                            
+                            <TextBlock Text="• Trang chủ: tổng quan nhanh"
+                                       Margin="0,12,0,4"
+                                       FontSize="13"
+                                       Foreground="#FF6D5C56"/>
+                            
+                            <TextBlock Text="• Nhân viên: danh sách, tài khoản, phân quyền"
+                                       Margin="0,0,0,4"
+                                       FontSize="13"
+                                       Foreground="#FF6D5C56"/>
+                            
+                            <TextBlock Text="• Kho: danh sách kho, tồn kho, chuyển kho"
+                                       Margin="0,0,0,4"
+                                       FontSize="13"
+                                       Foreground="#FF6D5C56"/>
+                            
+                            <TextBlock Text="• Hàng hóa: danh mục, loại hàng, đơn vị tính"
+                                       Margin="0,0,0,4"
+                                       FontSize="13"
+                                       Foreground="#FF6D5C56"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2"
+                    Background="White"
+                    BorderBrush="#FFE6DAD4"
+                    BorderThickness="1"
+                    CornerRadius="18"
+                    Padding="24">
+                
+                <StackPanel>
+                    <TextBlock Text="Thông báo"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#FF4E342E"/>
+
+                    <Border Margin="0,16,0,10"
+                            Background="#FFFFFAF7"
+                            BorderBrush="#FFEFE1D9"
+                            BorderThickness="1"
+                            CornerRadius="12"
+                            Padding="14">
+                        
+                        <TextBlock Text="• Kiểm tra số lượng tồn kho định kỳ."
+                                   FontSize="13"
+                                   Foreground="#FF6D5C56"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
+                    <Border Margin="0,0,0,10"
+                            Background="#FFFFFAF7"
+                            BorderBrush="#FFEFE1D9"
+                            BorderThickness="1"
+                            CornerRadius="12"
+                            Padding="14">
+                        
+                        <TextBlock Text="• Cập nhật phiếu nhập và phiếu xuất đầy đủ."
+                                   FontSize="13"
+                                   Foreground="#FF6D5C56"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
+                    <Border Background="#FFFFFAF7"
+                            BorderBrush="#FFEFE1D9"
+                            BorderThickness="1"
+                            CornerRadius="12"
+                            Padding="14">
+                        
+                        <TextBlock Text="• Theo dõi nhật ký hệ thống để kiểm tra thao tác người dùng."
+                                   FontSize="13"
+                                   Foreground="#FF6D5C56"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

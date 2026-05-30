@@ -1,0 +1,231 @@
+﻿<UserControl x:Class="Do_An.View.Admin.UcThemSuaNhaSanXuat"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Background="#FFF8F5F3"
+             MinWidth="920"
+             MinHeight="620"
+             d:DesignHeight="660"
+             d:DesignWidth="995">
+
+    <UserControl.Resources>
+        <!-- ===== Màu dùng chung ===== -->
+        <SolidColorBrush x:Key="CardBorderBrush" Color="#FFE6DAD4"/>
+        <SolidColorBrush x:Key="PrimaryTextBrush" Color="#FF5C3B31"/>
+        <SolidColorBrush x:Key="SecondaryTextBrush" Color="#FF8D7B74"/>
+        <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFAF8"/>
+        <SolidColorBrush x:Key="InputBorderBrush" Color="#FFE8DCD5"/>
+        <SolidColorBrush x:Key="SaveButtonBrush" Color="#FFB58A6A"/>
+        <SolidColorBrush x:Key="CancelButtonBrush" Color="#FF8B6251"/>
+
+        <!-- ===== Button ===== -->
+        <Style x:Key="FormButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.92"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.82"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== Label ===== -->
+        <Style x:Key="FormLabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="4,0,0,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+        </Style>
+
+        <!-- ===== TextBox ===== -->
+        <Style x:Key="FormTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource PrimaryTextBrush}"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+
+        <Style x:Key="FormNoteTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource FormTextBoxStyle}">
+            <Setter Property="Height" Value="92"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#FFF8F5F3">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+
+            <Border Margin="18"
+                    Padding="24"
+                    Background="White"
+                    BorderBrush="{StaticResource CardBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="20"
+                    VerticalAlignment="Top">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- ===== Tiêu đề ===== -->
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="{Binding TieuDe, FallbackValue=THÊM NHÀ SẢN XUẤT}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryTextBrush}"/>
+
+                        <TextBlock Text="Nhập thông tin nhà sản xuất bên dưới. Những mục có dấu * là bắt buộc."
+                                   Margin="0,8,0,0"
+                                   FontSize="14"
+                                   Foreground="{StaticResource SecondaryTextBrush}"/>
+                    </StackPanel>
+
+                    <!-- ===== Form nhập thông tin ===== -->
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Mã nhà sản xuất -->
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <TextBlock Text="Mã nhà sản xuất *" Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <TextBox Style="{StaticResource FormTextBoxStyle}"
+                                         Text="{Binding MaNSX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         IsReadOnly="{Binding IsEdit}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Tên nhà sản xuất -->
+                        <StackPanel Grid.Row="0" Grid.Column="2">
+                            <TextBlock Text="Tên nhà sản xuất *" Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <TextBox Style="{StaticResource FormTextBoxStyle}"
+                                         Text="{Binding TenNSX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Số điện thoại -->
+                        <StackPanel Grid.Row="2" Grid.Column="0">
+                            <TextBlock Text="Số điện thoại" Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <TextBox Style="{StaticResource FormTextBoxStyle}"
+                                         Text="{Binding SoDienThoai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Email -->
+                        <StackPanel Grid.Row="2" Grid.Column="2">
+                            <TextBlock Text="Email" Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="44"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <TextBox Style="{StaticResource FormTextBoxStyle}"
+                                         Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Địa chỉ -->
+                        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
+                            <TextBlock Text="Địa chỉ" Style="{StaticResource FormLabelStyle}"/>
+
+                            <Border Height="92"
+                                    Background="{StaticResource InputBackgroundBrush}"
+                                    BorderBrush="{StaticResource InputBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <TextBox Style="{StaticResource FormNoteTextBoxStyle}"
+                                         Text="{Binding DiaChi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- ===== Nút chức năng ===== -->
+                    <StackPanel Grid.Row="4"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Button Content="Hủy"
+                                Style="{StaticResource FormButtonStyle}"
+                                Background="{StaticResource CancelButtonBrush}"
+                                Command="{Binding HuyCommand}"/>
+
+                        <Button Content="Lưu"
+                                Margin="40,0,0,0"
+                                Style="{StaticResource FormButtonStyle}"
+                                Background="{StaticResource SaveButtonBrush}"
+                                Command="{Binding LuuCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
