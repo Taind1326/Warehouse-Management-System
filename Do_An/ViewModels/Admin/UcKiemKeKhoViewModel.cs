@@ -199,21 +199,10 @@ namespace Do_An.ViewModels.Admin
                 return;
             }
 
-            using (var db = new QUANLI_KHOHANGEntities())
+            if (SelectedItem.TrangThai != "Lưu tạm")
             {
-                bool laAdmin = LaAdmin(db);
-
-                if (SelectedItem.TrangThai == "Đã kiểm" && !laAdmin)
-                {
-                    MessageBox.Show("Nhân viên chỉ được sửa phiếu lưu tạm!");
-                    return;
-                }
-
-                if (SelectedItem.TrangThai == "Đã hủy")
-                {
-                    MessageBox.Show("Phiếu đã hủy không được sửa!");
-                    return;
-                }
+                MessageBox.Show("Chỉ được sửa phiếu kiểm có trạng thái Lưu tạm!");
+                return;
             }
 
             IsEdit = true;
@@ -351,8 +340,8 @@ namespace Do_An.ViewModels.Admin
             if (kk == null)
                 throw new Exception("Không tìm thấy phiếu kiểm cần sửa!");
 
-            if (kk.TRANGTHAI == "Đã hủy")
-                throw new Exception("Phiếu đã hủy không được sửa!");
+            if (kk.TRANGTHAI != "Lưu tạm")
+                throw new Exception("Chỉ được sửa phiếu kiểm có trạng thái Lưu tạm!");
 
             string maKho = LayMaKho(db);
 
@@ -383,7 +372,7 @@ namespace Do_An.ViewModels.Admin
             if (trangThai == "Đã kiểm")
                 CapNhatTonKhoSauKiemKe(db, maKho);
 
-            GhiLog(db, "Sửa phiếu kiểm kê", MaKiemKe, "Sửa phiếu kiểm kê" + MaKiemKe);
+            GhiLog(db, "Cập nhật kiểm kê", MaKiemKe, "Cập nhật kiểm kê " + MaKiemKe);
         }
 
         private string LayLoiChiTiet(Exception ex)
@@ -456,6 +445,8 @@ namespace Do_An.ViewModels.Admin
                         return;
                     }
 
+                    bool laAdmin = LaAdmin(db);
+
                     if (kk.TRANGTHAI == "Đã hủy")
                     {
                         MessageBox.Show("Phiếu này đã bị hủy trước đó!");
@@ -464,13 +455,19 @@ namespace Do_An.ViewModels.Admin
 
                     if (kk.TRANGTHAI == "Đã kiểm")
                     {
+                        if (!laAdmin)
+                        {
+                            MessageBox.Show("Chỉ Admin mới được hủy phiếu đã kiểm!");
+                            return;
+                        }
+
                         kk.TRANGTHAI = "Đã hủy";
 
                         GhiLog(
                             db,
                             "Hủy phiếu kiểm kê",
                             kk.MAKIEMKE,
-                            "Chuyển phiếu đã kiểm sang trạng thái Đã hủy");
+                            "Admin chuyển phiếu kiểm kê sang trạng thái Đã hủy");
 
                         db.SaveChanges();
 
@@ -478,7 +475,6 @@ namespace Do_An.ViewModels.Admin
                         LoadKiemKe();
                         return;
                     }
-
                     if (kk.TRANGTHAI == "Lưu tạm")
                     {
                         var chiTiet = db.CT_KIEMKE
@@ -491,10 +487,10 @@ namespace Do_An.ViewModels.Admin
                         db.KIEMKEKHOes.Remove(kk);
 
                         GhiLog(
-                            db,
-                            "Xóa phiếu kiểm kê",
-                            kk.MAKIEMKE,
-                            "Xóa phiếu kiểm kê lưu tạm");
+                                db,
+                                "Hủy phiếu kiểm kê",
+                                kk.MAKIEMKE,
+                                "Xóa phiếu kiểm kê lưu tạm");
 
                         db.SaveChanges();
 
@@ -508,7 +504,7 @@ namespace Do_An.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Xóa phiếu kiểm thất bại!\n" + ex.Message);
+                MessageBox.Show("Xóa phiếu kiểm thất bại!\n" + LayLoiChiTiet(ex));
             }
         }
 

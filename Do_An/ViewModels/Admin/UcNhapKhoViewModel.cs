@@ -258,15 +258,10 @@ namespace Do_An.ViewModels.Admin
                 return;
             }
 
-            using (var db = new QUANLI_KHOHANGEntities())
+            if (SelectedItem.TrangThai != "Lưu tạm")
             {
-                bool laAdmin = LaAdmin(db);
-
-                if (SelectedItem.TrangThai == "Đã nhập" && !laAdmin)
-                {
-                    MessageBox.Show("Nhân viên chỉ được sửa phiếu lưu tạm!");
-                    return;
-                }
+                MessageBox.Show("Chỉ được sửa phiếu nhập có trạng thái Lưu tạm!");
+                return;
             }
 
             IsEdit = true;
@@ -309,19 +304,29 @@ namespace Do_An.ViewModels.Admin
 
                     bool laAdmin = LaAdmin(db);
 
+                    if (pn.TRANGTHAI == "Đã hủy")
+                    {
+                        MessageBox.Show("Phiếu này đã bị hủy trước đó!");
+                        return;
+                    }
+
                     if (pn.TRANGTHAI == "Đã nhập")
                     {
                         if (!laAdmin)
                         {
-                            MessageBox.Show("Nhân viên không được xóa phiếu đã nhập!");
+                            MessageBox.Show("Chỉ Admin mới được hủy phiếu đã nhập!");
                             return;
                         }
 
                         TruTonKhoTheoChiTietCu(db, pn.MAKHO, pn.MAPN);
+
                         pn.TRANGTHAI = "Đã hủy";
 
-                        GhiLog(db, "Hủy phiếu nhập", pn.MAPN,
-                            "Admin chuyển phiếu đã nhập sang trạng thái Đã hủy và trừ lại tồn kho");
+                        GhiLog(
+                            db,
+                            "Hủy phiếu nhập",
+                            pn.MAPN,
+                            "Admin chuyển phiếu nhập sang trạng thái Đã hủy");
 
                         db.SaveChanges();
 
@@ -521,6 +526,9 @@ namespace Do_An.ViewModels.Admin
 
             if (pn == null)
                 throw new Exception("Không tìm thấy phiếu nhập cần sửa!");
+
+            if (pn.TRANGTHAI != "Lưu tạm")
+                throw new Exception("Chỉ được sửa phiếu nhập có trạng thái Lưu tạm!");
 
             string maKhoCu = pn.MAKHO;
             string trangThaiCu = pn.TRANGTHAI;
@@ -841,6 +849,19 @@ namespace Do_An.ViewModels.Admin
         private string DinhDangTien(decimal soTien)
         {
             return soTien.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) + " đ";
+        }
+
+        private string LayLoiChiTiet(Exception ex)
+        {
+            string loi = ex.Message;
+
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                loi += "\n" + ex.Message;
+            }
+
+            return loi;
         }
 
         private void BaoThayDoiForm()

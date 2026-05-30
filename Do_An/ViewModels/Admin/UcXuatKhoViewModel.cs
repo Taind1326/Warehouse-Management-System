@@ -204,15 +204,10 @@ namespace Do_An.ViewModels.Admin
                 return;
             }
 
-            using (var db = new QUANLI_KHOHANGEntities())
+            if (SelectedItem.TrangThai != "Lưu tạm")
             {
-                bool laAdmin = LaAdmin(db);
-
-                if (SelectedItem.TrangThai == "Đã xuất" && !laAdmin)
-                {
-                    MessageBox.Show("Nhân viên chỉ được sửa phiếu lưu tạm!");
-                    return;
-                }
+                MessageBox.Show("Chỉ được sửa phiếu xuất có trạng thái Lưu tạm!");
+                return;
             }
 
             IsEdit = true;
@@ -312,20 +307,30 @@ namespace Do_An.ViewModels.Admin
 
                     bool laAdmin = LaAdmin(db);
 
+                    if (px.TRANGTHAI == "Đã hủy")
+                    {
+                        MessageBox.Show("Phiếu này đã bị hủy trước đó!");
+                        return;
+                    }
+
                     if (px.TRANGTHAI == "Đã xuất")
                     {
                         if (!laAdmin)
                         {
-                            MessageBox.Show("Nhân viên không được xóa phiếu đã xuất!");
+                            MessageBox.Show("Chỉ Admin mới được hủy phiếu đã xuất!");
                             return;
                         }
 
                         CongTonKhoTheoChiTietCu(db, px.MAKHO, px.MAPX);
                         TruTonKhoNhanTheoChiTietCu(db, px.MAKHONHAN, px.MAPX);
+
                         px.TRANGTHAI = "Đã hủy";
 
-                        GhiLog(db, "Hủy phiếu xuất", px.MAPX,
-                            "Admin chuyển phiếu đã xuất sang trạng thái Đã hủy và cộng lại tồn kho");
+                        GhiLog(
+                            db,
+                            "Hủy phiếu xuất",
+                            px.MAPX,
+                            "Admin chuyển phiếu xuất sang trạng thái Đã hủy");
 
                         db.SaveChanges();
 
@@ -541,6 +546,9 @@ namespace Do_An.ViewModels.Admin
 
             if (px == null)
                 throw new Exception("Không tìm thấy phiếu xuất cần sửa!");
+
+            if (px.TRANGTHAI != "Lưu tạm")
+                throw new Exception("Chỉ được sửa phiếu xuất có trạng thái Lưu tạm!");
 
             string maKhoCu = px.MAKHO;
             string maKhoNhanCu = px.MAKHONHAN;
