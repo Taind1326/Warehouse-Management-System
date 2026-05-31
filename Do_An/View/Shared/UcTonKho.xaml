@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="Do_An.View.Admin.UcKiemKeKho"
+﻿<UserControl x:Class="Do_An.View.Shared.UcTonKho"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="700"
-             d:DesignWidth="900"
+             d:DesignWidth="1000"
              Background="#FFF8F5F3">
 
     <UserControl.Resources>
@@ -16,10 +16,7 @@
         <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="#FFF6EEEA"/>
         <SolidColorBrush x:Key="SearchBackgroundBrush" Color="#FFFFFAF8"/>
         <SolidColorBrush x:Key="IconCircleBrush" Color="#FFF6EDE7"/>
-
-        <SolidColorBrush x:Key="AddButtonBrush" Color="#FFB58A6A"/>
-        <SolidColorBrush x:Key="DeleteButtonBrush" Color="#FFD98A78"/>
-        <SolidColorBrush x:Key="EditButtonBrush" Color="#FFC49478"/>
+        <SolidColorBrush x:Key="MainButtonBrush" Color="#FFB58A6A"/>
         <SolidColorBrush x:Key="ExitButtonBrush" Color="#FF8B6251"/>
 
         <Style x:Key="PillButtonStyle" TargetType="Button">
@@ -40,16 +37,12 @@
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.92"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.82"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -71,25 +64,18 @@
                         <Grid>
                             <TextBlock x:Name="Placeholder"
                                        Text="{TemplateBinding Tag}"
-                                       Margin="2,0,0,0"
                                        VerticalAlignment="Center"
                                        Foreground="{StaticResource SecondaryTextBrush}"
                                        IsHitTestVisible="False"
                                        Visibility="Collapsed"/>
-
                             <ScrollViewer x:Name="PART_ContentHost"/>
                         </Grid>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="Text" Value="">
-                                <Setter TargetName="Placeholder"
-                                        Property="Visibility"
-                                        Value="Visible"/>
+                                <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
                             </Trigger>
                             <Trigger Property="Text" Value="{x:Null}">
-                                <Setter TargetName="Placeholder"
-                                        Property="Visibility"
-                                        Value="Visible"/>
+                                <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -97,7 +83,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="KiemKhoDataGridStyle" TargetType="DataGrid">
+        <Style x:Key="TonKhoDataGridStyle" TargetType="DataGrid">
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="CanUserDeleteRows" Value="False"/>
@@ -107,20 +93,14 @@
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="RowHeaderWidth" Value="0"/>
             <Setter Property="GridLinesVisibility" Value="None"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="AlternatingRowBackground" Value="#FFFCF8F6"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         </Style>
 
-        <Style x:Key="CellTextStyle" TargetType="TextBlock">
-            <Setter Property="Margin" Value="16,0,8,0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-        </Style>
-
-        <Style x:Key="KiemKhoDataGridHeaderStyle" TargetType="DataGridColumnHeader">
+        <Style x:Key="TonKhoHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{StaticResource HeaderBackgroundBrush}"/>
             <Setter Property="Foreground" Value="#FF7A5A48"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -131,38 +111,39 @@
             <Setter Property="Padding" Value="16,0,0,0"/>
         </Style>
 
-        <Style x:Key="KiemKhoDataGridCellStyle" TargetType="DataGridCell">
+        <Style x:Key="TonKhoCellStyle" TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="16,6,8,6"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Foreground" Value="#FF4E342E"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#FFE8DAD4"/>
                     <Setter Property="Foreground" Value="#FF4E342E"/>
-                    <Setter Property="BorderBrush" Value="#FFE8DAD4"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="KiemKhoDataGridRowStyle" TargetType="DataGridRow">
+        <Style x:Key="TonKhoRowStyle" TargetType="DataGridRow">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#FFF3E9E4"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#FFE8DAD4"/>
-                    <Setter Property="Foreground" Value="#FF5C3B31"/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CellTextStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="16,0,8,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         </Style>
     </UserControl.Resources>
 
@@ -174,7 +155,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ===== Header ===== -->
+        <!-- HEADER -->
         <Border Grid.Row="0"
                 Margin="18,18,18,12"
                 Padding="24,18"
@@ -190,12 +171,12 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel>
-                    <TextBlock Text="DANH SÁCH PHIẾU KIỂM KÊ KHO"
+                    <TextBlock Text="DANH SÁCH TỒN KHO"
                                FontSize="24"
                                FontWeight="Bold"
                                Foreground="{StaticResource PrimaryTextBrush}"/>
 
-                    <TextBlock Text="Quản lý thông tin và danh sách kiểm kê kho"
+                    <TextBlock Text="Theo dõi số lượng tồn của từng sản phẩm trong từng kho"
                                Margin="0,8,0,0"
                                FontSize="14"
                                Foreground="{StaticResource SecondaryTextBrush}"/>
@@ -213,12 +194,13 @@
 
                     <StackPanel HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
-                        <TextBlock Text="Tổng kiểm kê"
+
+                        <TextBlock Text="Tổng dòng tồn"
                                    HorizontalAlignment="Center"
                                    FontSize="12"
                                    Foreground="{StaticResource SecondaryTextBrush}"/>
 
-                        <TextBlock Text="{Binding DanhSachKiemKe.Count, FallbackValue=0}"
+                        <TextBlock Text="{Binding DanhSachTonKho.Count, FallbackValue=0}"
                                    HorizontalAlignment="Center"
                                    FontSize="28"
                                    FontWeight="Bold"
@@ -243,7 +225,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- ===== Action Bar ===== -->
+        <!-- TOOLBAR -->
         <Border Grid.Row="1"
                 Margin="18,0,18,12"
                 Padding="18,14"
@@ -255,89 +237,39 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="12"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="12"/>
-                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="330"/>
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0"
                         Style="{StaticResource PillButtonStyle}"
-                        Background="{StaticResource AddButtonBrush}"
-                        Command="{Binding AddCommand}">
+                        Background="{StaticResource MainButtonBrush}"
+                        Command="{Binding RefreshCommand}">
+
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
+
                         <Border Width="24"
                                 Height="24"
                                 Margin="0,0,8,0"
                                 Background="{StaticResource IconCircleBrush}"
                                 CornerRadius="12">
-                            <TextBlock Text="+"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Top"
-                                       FontSize="15"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource AddButtonBrush}"/>
-                        </Border>
 
-                        <TextBlock Text="Thêm mới"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Button Grid.Column="2"
-                        Style="{StaticResource PillButtonStyle}"
-                        Background="{StaticResource DeleteButtonBrush}"
-                        Command="{Binding DeleteCommand}">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Border Width="24"
-                                Height="24"
-                                Margin="0,0,8,0"
-                                Background="{StaticResource IconCircleBrush}"
-                                CornerRadius="12">
-                            <TextBlock Text="×"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Top"
-                                       FontSize="15"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource DeleteButtonBrush}"/>
-                        </Border>
-
-                        <TextBlock Text="Xóa"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <Button Grid.Column="4"
-                        Style="{StaticResource PillButtonStyle}"
-                        Background="{StaticResource EditButtonBrush}"
-                        Command="{Binding EditCommand}">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Border Width="24"
-                                Height="24"
-                                Margin="0,0,8,0"
-                                Background="{StaticResource IconCircleBrush}"
-                                CornerRadius="12">
-                            <TextBlock Text="✎"
+                            <TextBlock Text="↻"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        FontSize="13"
-                                       Foreground="{StaticResource EditButtonBrush}"/>
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource MainButtonBrush}"/>
                         </Border>
 
-                        <TextBlock Text="Sửa"
+                        <TextBlock Text="Làm mới"
                                    VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
 
-                <Border Grid.Column="6"
+                <Border Grid.Column="2"
                         Width="330"
                         Height="44"
                         HorizontalAlignment="Right"
@@ -361,7 +293,7 @@
 
                         <TextBox Grid.Column="1"
                                  Style="{StaticResource SearchTextBoxStyle}"
-                                 Tag="Tìm kiếm kiểm kê..."
+                                 Tag="Tìm kiếm tồn kho..."
                                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="0,0,14,0"/>
                     </Grid>
@@ -369,7 +301,7 @@
             </Grid>
         </Border>
 
-        <!-- ===== DataGrid ===== -->
+        <!-- DATA -->
         <Border Grid.Row="2"
                 Margin="18,0,18,18"
                 Padding="16"
@@ -384,67 +316,64 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Danh sách kiểm kê kho"
+                <TextBlock Text="Danh sách tồn kho"
                            Margin="0,0,0,12"
                            FontSize="16"
                            FontWeight="Bold"
                            Foreground="{StaticResource PrimaryTextBrush}"/>
 
                 <DataGrid Grid.Row="1"
-                          ItemsSource="{Binding DanhSachKiemKe}"
+                          ItemsSource="{Binding DanhSachTonKho}"
                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                          Style="{StaticResource KiemKhoDataGridStyle}"
-                          ColumnHeaderStyle="{StaticResource KiemKhoDataGridHeaderStyle}"
-                          CellStyle="{StaticResource KiemKhoDataGridCellStyle}"
-                          RowStyle="{StaticResource KiemKhoDataGridRowStyle}">
+                          Style="{StaticResource TonKhoDataGridStyle}"
+                          ColumnHeaderStyle="{StaticResource TonKhoHeaderStyle}"
+                          CellStyle="{StaticResource TonKhoCellStyle}"
+                          RowStyle="{StaticResource TonKhoRowStyle}">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="STT"
                                             Binding="{Binding STT}"
                                             Width="50"
-                                            IsReadOnly="True"
-                                            ElementStyle="{StaticResource CellTextStyle}"/>
-
-                        <DataGridTextColumn Header="Mã kiểm"
-                                            Binding="{Binding MaKiemKe}"
-                                            Width="115"
-                                            IsReadOnly="True"
-                                            ElementStyle="{StaticResource CellTextStyle}"/>
-
-                        <DataGridTextColumn Header="Ngày kiểm"
-                                            Binding="{Binding NgayKiem}"
-                                            Width="125"
-                                            IsReadOnly="True"
                                             ElementStyle="{StaticResource CellTextStyle}"/>
 
                         <DataGridTextColumn Header="Mã kho"
                                             Binding="{Binding MaKho}"
+                                            Width="90"
+                                            ElementStyle="{StaticResource CellTextStyle}"/>
+
+                        <DataGridTextColumn Header="Tên kho"
+                                            Binding="{Binding TenKho}"
+                                            Width="1.1*"
+                                            ElementStyle="{StaticResource CellTextStyle}"/>
+
+                        <DataGridTextColumn Header="Mã SP"
+                                            Binding="{Binding MaSanPham}"
+                                            Width="90"
+                                            ElementStyle="{StaticResource CellTextStyle}"/>
+
+                        <DataGridTextColumn Header="Tên sản phẩm"
+                                            Binding="{Binding TenSanPham}"
+                                            Width="2*"
+                                            ElementStyle="{StaticResource CellTextStyle}"/>
+
+                        <DataGridTextColumn Header="Số lượng tồn"
+                                            Binding="{Binding SoLuongTon}"
                                             Width="100"
-                                            IsReadOnly="True"
                                             ElementStyle="{StaticResource CellTextStyle}"/>
 
-                        <DataGridTextColumn Header="Người kiểm"
-                                            Binding="{Binding NguoiKiem}"
-                                            Width="1*"
-                                            IsReadOnly="True"
+                        <DataGridTextColumn Header="Mức tối thiểu"
+                                            Binding="{Binding SoLuongToiThieu}"
+                                            Width="110"
                                             ElementStyle="{StaticResource CellTextStyle}"/>
 
-                        <DataGridTextColumn Header="Tổng lệch"
-                                            Binding="{Binding TongLech}"
-                                            Width="120"
-                                            IsReadOnly="True"
-                                            ElementStyle="{StaticResource CellTextStyle}"/>
-
-                        <DataGridTextColumn Header="Ghi chú"
-                                            Binding="{Binding GhiChu}"
-                                            Width="1.4*"
-                                            IsReadOnly="True"
+                        <DataGridTextColumn Header="ĐVT"
+                                            Binding="{Binding DonViTinh}"
+                                            Width="80"
                                             ElementStyle="{StaticResource CellTextStyle}"/>
 
                         <DataGridTextColumn Header="Trạng thái"
-                                            Binding="{Binding TrangThai}"
+                                            Binding="{Binding TrangThaiTon}"
                                             Width="115"
-                                            IsReadOnly="True"
                                             ElementStyle="{StaticResource CellTextStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>

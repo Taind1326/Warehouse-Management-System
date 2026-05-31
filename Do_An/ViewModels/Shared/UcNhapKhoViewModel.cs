@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Do_An.ViewModels.Admin
+namespace Do_An.ViewModels.Shared
 {
     public class UcNhapKhoViewModel : BaseViewModel
     {
@@ -183,8 +183,12 @@ namespace Do_An.ViewModels.Admin
                 DanhSachNhaSanXuat = new ObservableCollection<string>(
                     db.NHASANXUATs.Select(x => x.TENNSX).ToList());
 
-                DanhSachNguoiLap = new ObservableCollection<string>(
-                    db.TAIKHOANs.Select(x => x.TENTK).ToList());
+                DanhSachNguoiLap = new ObservableCollection<string>
+                {
+                    CurrentUser.TenTK
+                };
+
+                NguoiLapDuocChon = CurrentUser.TenTK;
 
                 TatCaSanPham = new ObservableCollection<SanPhamNhapItem>(
                     db.SANPHAMs
@@ -449,6 +453,9 @@ namespace Do_An.ViewModels.Admin
 
         private void LuuPhieuNhap(string trangThai)
         {
+            NguoiLapDuocChon = CurrentUser.TenTK;
+            OnPropertyChanged(nameof(NguoiLapDuocChon));
+
             if (!KiemTraDuLieu())
                 return;
 
@@ -539,7 +546,6 @@ namespace Do_An.ViewModels.Admin
 
             pn.MAKHO = maKhoMoi;
             pn.MANSX = LayMaNSX(db);
-            pn.MATK = LayMaTaiKhoan(db);
             pn.NGAYNHAP = NgayNhap;
             pn.TONGTIEN = TongTien;
             pn.TRANGTHAI = trangThai;
@@ -645,9 +651,9 @@ namespace Do_An.ViewModels.Admin
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(NguoiLapDuocChon))
+            if (string.IsNullOrWhiteSpace(CurrentUser.MaTK))
             {
-                MessageBox.Show("Vui lòng chọn người lập!");
+                MessageBox.Show("Không xác định được tài khoản đang đăng nhập!");
                 return false;
             }
 
@@ -744,7 +750,7 @@ namespace Do_An.ViewModels.Admin
 
         private string LayMaTaiKhoan(QUANLI_KHOHANGEntities db)
         {
-            return db.TAIKHOANs.FirstOrDefault(x => x.TENTK == NguoiLapDuocChon)?.MATK;
+            return CurrentUser.MaTK;
         }
 
         private string LayTenTaiKhoan(QUANLI_KHOHANGEntities db, string maTK)

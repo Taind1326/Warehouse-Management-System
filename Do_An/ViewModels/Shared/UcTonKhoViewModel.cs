@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
-namespace Do_An.ViewModels.Admin
+namespace Do_An.ViewModels.Shared
 {
     public class UcTonKhoViewModel : BaseViewModel
     {

@@ -147,13 +147,13 @@
     <Compile Include="ViewModels\Admin\AdminViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcHangHoaViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcKhoViewModel.cs" />
-    <Compile Include="ViewModels\Admin\UcKiemKeKhoViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcKiemKeKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcLoaiHangViewModel.cs" />
-    <Compile Include="ViewModels\Admin\UcNhapKhoViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcNhapKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcNhaSanXuatViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcTongQuanThongKeViewModel.cs" />
-    <Compile Include="ViewModels\Admin\UcTonKhoViewModel.cs" />
-    <Compile Include="ViewModels\Admin\UcXuatKhoViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcTonKhoViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcXuatKhoViewModel.cs" />
     <Compile Include="ViewModels\KeToan\KeToanViewModel.cs" />
     <Compile Include="ViewModels\NhanVienKho\UcHangHoaViewModel.cs" />
     <Compile Include="ViewModels\NhanVienKho\UcKhoViewModel.cs" />
@@ -177,25 +177,25 @@
     <Compile Include="View\Admin\UcKho.xaml.cs">
       <DependentUpon>UcKho.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcKiemKeKho.xaml.cs">
+    <Compile Include="View\Shared\UcKiemKeKho.xaml.cs">
       <DependentUpon>UcKiemKeKho.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Admin\UcLoaiHang.xaml.cs">
       <DependentUpon>UcLoaiHang.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcNhapKho.xaml.cs">
+    <Compile Include="View\Shared\UcNhapKho.xaml.cs">
       <DependentUpon>UcNhapKho.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Admin\UcNhaSanXuat.xaml.cs">
       <DependentUpon>UcNhaSanXuat.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcPhieuKiemKe.xaml.cs">
+    <Compile Include="View\Shared\UcPhieuKiemKe.xaml.cs">
       <DependentUpon>UcPhieuKiemKe.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcPhieuNhap.xaml.cs">
+    <Compile Include="View\Shared\UcPhieuNhap.xaml.cs">
       <DependentUpon>UcPhieuNhap.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcPhieuXuat.xaml.cs">
+    <Compile Include="View\Shared\UcPhieuXuat.xaml.cs">
       <DependentUpon>UcPhieuXuat.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Admin\UcThemSuaHangHoa.xaml.cs">
@@ -213,10 +213,10 @@
     <Compile Include="View\Admin\UcTongQuanThongKe.xaml.cs">
       <DependentUpon>UcTongQuanThongKe.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcTonKho.xaml.cs">
+    <Compile Include="View\Shared\UcTonKho.xaml.cs">
       <DependentUpon>UcTonKho.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Admin\UcXuatKho.xaml.cs">
+    <Compile Include="View\Shared\UcXuatKho.xaml.cs">
       <DependentUpon>UcXuatKho.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\KeToan\KeToan.xaml.cs">
@@ -324,7 +324,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcKiemKeKho.xaml">
+    <Page Include="View\Shared\UcKiemKeKho.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -332,7 +332,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcNhapKho.xaml">
+    <Page Include="View\Shared\UcNhapKho.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -340,15 +340,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcPhieuKiemKe.xaml">
+    <Page Include="View\Shared\UcPhieuKiemKe.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcPhieuNhap.xaml">
+    <Page Include="View\Shared\UcPhieuNhap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcPhieuXuat.xaml">
+    <Page Include="View\Shared\UcPhieuXuat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -372,11 +372,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcTonKho.xaml">
+    <Page Include="View\Shared\UcTonKho.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Admin\UcXuatKho.xaml">
+    <Page Include="View\Shared\UcXuatKho.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

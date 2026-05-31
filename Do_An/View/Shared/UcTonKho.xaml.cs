@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Do_An.View.Admin
+namespace Do_An.View.Shared
 {
     /// <summary>
-    /// Interaction logic for UcPhieuKiemKe.xaml
+    /// Interaction logic for UcTonKho.xaml
     /// </summary>
-    public partial class UcPhieuKiemKe : UserControl
+    public partial class UcTonKho : UserControl
     {
-        public UcPhieuKiemKe()
+        public UcTonKho()
         {
             InitializeComponent();
         }

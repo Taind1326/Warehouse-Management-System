@@ -1,6 +1,5 @@
 ﻿using Do_An.Helper;
 using Do_An.Model;
-using Do_An.View;
 using Do_An.View.Admin;
 using Do_An.View.Shared;
 using Do_An.ViewModels.Shared;
