@@ -49,6 +49,9 @@
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_PX_TAIKHOAN" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.FK_TONKHO_SANPHAM" ManuallyRouted="false" />
         <AssociationConnector Association="QUANLI_KHOHANGModel.PHANQUYEN" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="QUANLI_KHOHANGModel.CANHBAO" Width="1.5" PointX="13.5" PointY="15.25" />
+        <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CANHBAO_KHO" />
+        <AssociationConnector Association="QUANLI_KHOHANGModel.FK_CANHBAO_SANPHAM" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

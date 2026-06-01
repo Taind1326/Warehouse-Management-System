@@ -45,5 +45,6 @@ namespace Do_An.Model
         public DbSet<V_BAOCAO_XUAT> V_BAOCAO_XUAT { get; set; }
         public DbSet<V_NHATKY_DANGNHAP> V_NHATKY_DANGNHAP { get; set; }
         public DbSet<V_NHATKY_THAOTAC> V_NHATKY_THAOTAC { get; set; }
+        public DbSet<CANHBAO> CANHBAOs { get; set; }
     }
 }

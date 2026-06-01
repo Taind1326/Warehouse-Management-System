@@ -392,9 +392,11 @@
                                         Command="{Binding OpenKhoCommand}"/>
 
                                 <Button Style="{StaticResource SubMenuButtonStyle}"
+                                        Command="{Binding OpenNhapKhoCommand}"
                                         Content="• Nhập kho"/>
 
                                 <Button Style="{StaticResource SubMenuButtonStyle}"
+                                        Command="{Binding OpenXuatKhoCommand}"
                                         Content="• Xuất kho"/>
 
                                 <Button Style="{StaticResource SubMenuButtonStyle}"
@@ -402,6 +404,7 @@
                                         Command="{Binding OpenTonKhoCommand}"/>
 
                                 <Button Style="{StaticResource SubMenuButtonStyle}"
+                                        Command="{Binding OpenKiemKeKhoCommand}"
                                         Content="• Kiểm kho"/>
                             </StackPanel>
                         </Expander>

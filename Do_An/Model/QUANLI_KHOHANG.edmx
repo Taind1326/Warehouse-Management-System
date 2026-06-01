@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="QUANLI_KHOHANGModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CANHBAO">
+          <Key>
+            <PropertyRef Name="MACANHBAO" />
+          </Key>
+          <Property Name="MACANHBAO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MAKHO" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="MASP" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="NOIDUNG" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="NGAYTAO" Type="datetime" Nullable="false" />
+          <Property Name="DAXEM" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="CT_KIEMKE">
           <Key>
             <PropertyRef Name="MAKIEMKE" />
@@ -247,6 +258,30 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_NHATKY_THAOTAC' does not have
           <Property Name="TRANGTHAI" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="GHICHU" Type="nvarchar" MaxLength="255" />
         </EntityType>
+        <Association Name="FK_CANHBAO_KHO">
+          <End Role="KHO" Type="Self.KHO" Multiplicity="1" />
+          <End Role="CANHBAO" Type="Self.CANHBAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KHO">
+              <PropertyRef Name="MAKHO" />
+            </Principal>
+            <Dependent Role="CANHBAO">
+              <PropertyRef Name="MAKHO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CANHBAO_SANPHAM">
+          <End Role="SANPHAM" Type="Self.SANPHAM" Multiplicity="1" />
+          <End Role="CANHBAO" Type="Self.CANHBAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SANPHAM">
+              <PropertyRef Name="MASP" />
+            </Principal>
+            <Dependent Role="CANHBAO">
+              <PropertyRef Name="MASP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CT_KIEMKE_KIEMKEKHO">
           <End Role="KIEMKEKHO" Type="Self.KIEMKEKHO" Multiplicity="1" />
           <End Role="CT_KIEMKE" Type="Self.CT_KIEMKE" Multiplicity="*" />
@@ -548,6 +583,7 @@ warning 6002: The table/view 'QUANLI_KHOHANG.dbo.V_NHATKY_THAOTAC' does not have
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="QUANLI_KHOHANGModelStoreContainer">
+          <EntitySet Name="CANHBAO" EntityType="Self.CANHBAO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CT_KIEMKE" EntityType="Self.CT_KIEMKE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CT_PHIEUNHAP" EntityType="Self.CT_PHIEUNHAP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CT_PHIEUXUAT" EntityType="Self.CT_PHIEUXUAT" Schema="dbo" store:Type="Tables" />
@@ -606,6 +642,14 @@ FROM [dbo].[V_NHATKY_DANGNHAP] AS [V_NHATKY_DANGNHAP]</DefiningQuery>
 [V_NHATKY_THAOTAC].[GHICHU] AS [GHICHU]
 FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_CANHBAO_KHO" Association="Self.FK_CANHBAO_KHO">
+            <End Role="KHO" EntitySet="KHO" />
+            <End Role="CANHBAO" EntitySet="CANHBAO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CANHBAO_SANPHAM" Association="Self.FK_CANHBAO_SANPHAM">
+            <End Role="SANPHAM" EntitySet="SANPHAM" />
+            <End Role="CANHBAO" EntitySet="CANHBAO" />
+          </AssociationSet>
           <AssociationSet Name="FK_CT_KIEMKE_KIEMKEKHO" Association="Self.FK_CT_KIEMKE_KIEMKEKHO">
             <End Role="KIEMKEKHO" EntitySet="KIEMKEKHO" />
             <End Role="CT_KIEMKE" EntitySet="CT_KIEMKE" />
@@ -770,6 +814,7 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           <NavigationProperty Name="PHIEUXUATs" Relationship="Self.FK_PX_KHO_NHAN" FromRole="KHO" ToRole="PHIEUXUAT" />
           <NavigationProperty Name="PHIEUXUATs1" Relationship="Self.FK_PX_KHO_XUAT" FromRole="KHO" ToRole="PHIEUXUAT" />
           <NavigationProperty Name="TONKHOes" Relationship="Self.FK_TONKHO_KHO" FromRole="KHO" ToRole="TONKHO" />
+          <NavigationProperty Name="CANHBAOs" Relationship="QUANLI_KHOHANGModel.FK_CANHBAO_KHO" FromRole="KHO" ToRole="CANHBAO" />
         </EntityType>
         <EntityType Name="KIEMKEKHO">
           <Key>
@@ -891,6 +936,7 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
           <NavigationProperty Name="LOAIHANG" Relationship="Self.FK_SANPHAM_LOAIHANG" FromRole="SANPHAM" ToRole="LOAIHANG" />
           <NavigationProperty Name="NHASANXUAT" Relationship="Self.FK_SANPHAM_NHASANXUAT" FromRole="SANPHAM" ToRole="NHASANXUAT" />
           <NavigationProperty Name="TONKHOes" Relationship="Self.FK_TONKHO_SANPHAM" FromRole="SANPHAM" ToRole="TONKHO" />
+          <NavigationProperty Name="CANHBAOs" Relationship="QUANLI_KHOHANGModel.FK_CANHBAO_SANPHAM" FromRole="SANPHAM" ToRole="CANHBAO" />
         </EntityType>
         <EntityType Name="TAIKHOAN">
           <Key>
@@ -1384,7 +1430,53 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
             <End Role="TAIKHOAN" EntitySet="TAIKHOANs" />
             <End Role="VAITRO" EntitySet="VAITROes" />
           </AssociationSet>
+          <EntitySet Name="CANHBAOs" EntityType="QUANLI_KHOHANGModel.CANHBAO" />
+          <AssociationSet Name="FK_CANHBAO_KHO" Association="QUANLI_KHOHANGModel.FK_CANHBAO_KHO">
+            <End Role="KHO" EntitySet="KHOes" />
+            <End Role="CANHBAO" EntitySet="CANHBAOs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CANHBAO_SANPHAM" Association="QUANLI_KHOHANGModel.FK_CANHBAO_SANPHAM">
+            <End Role="SANPHAM" EntitySet="SANPHAMs" />
+            <End Role="CANHBAO" EntitySet="CANHBAOs" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="CANHBAO">
+          <Key>
+            <PropertyRef Name="MACANHBAO" />
+          </Key>
+          <Property Name="MACANHBAO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MAKHO" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="MASP" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="NOIDUNG" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NGAYTAO" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DAXEM" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="KHO" Relationship="QUANLI_KHOHANGModel.FK_CANHBAO_KHO" FromRole="CANHBAO" ToRole="KHO" />
+          <NavigationProperty Name="SANPHAM" Relationship="QUANLI_KHOHANGModel.FK_CANHBAO_SANPHAM" FromRole="CANHBAO" ToRole="SANPHAM" />
+        </EntityType>
+        <Association Name="FK_CANHBAO_KHO">
+          <End Type="QUANLI_KHOHANGModel.KHO" Role="KHO" Multiplicity="1" />
+          <End Type="QUANLI_KHOHANGModel.CANHBAO" Role="CANHBAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KHO">
+              <PropertyRef Name="MAKHO" />
+            </Principal>
+            <Dependent Role="CANHBAO">
+              <PropertyRef Name="MAKHO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CANHBAO_SANPHAM">
+          <End Type="QUANLI_KHOHANGModel.SANPHAM" Role="SANPHAM" Multiplicity="1" />
+          <End Type="QUANLI_KHOHANGModel.CANHBAO" Role="CANHBAO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SANPHAM">
+              <PropertyRef Name="MASP" />
+            </Principal>
+            <Dependent Role="CANHBAO">
+              <PropertyRef Name="MASP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1626,6 +1718,18 @@ FROM [dbo].[V_NHATKY_THAOTAC] AS [V_NHATKY_THAOTAC]</DefiningQuery>
               <ScalarProperty Name="MAVT" ColumnName="MAVT" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="CANHBAOs">
+            <EntityTypeMapping TypeName="QUANLI_KHOHANGModel.CANHBAO">
+              <MappingFragment StoreEntitySet="CANHBAO">
+                <ScalarProperty Name="DAXEM" ColumnName="DAXEM" />
+                <ScalarProperty Name="NGAYTAO" ColumnName="NGAYTAO" />
+                <ScalarProperty Name="NOIDUNG" ColumnName="NOIDUNG" />
+                <ScalarProperty Name="MASP" ColumnName="MASP" />
+                <ScalarProperty Name="MAKHO" ColumnName="MAKHO" />
+                <ScalarProperty Name="MACANHBAO" ColumnName="MACANHBAO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

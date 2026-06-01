@@ -71,6 +71,9 @@
     <Compile Include="Helper\RatioToGridLengthConverter.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\StringToColorConverter.cs" />
+    <Compile Include="Model\CANHBAO.cs">
+      <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\CT_KIEMKE.cs">
       <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
     </Compile>

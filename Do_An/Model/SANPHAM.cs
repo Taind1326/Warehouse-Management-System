@@ -20,6 +20,7 @@ namespace Do_An.Model
             this.CT_PHIEUNHAP = new HashSet<CT_PHIEUNHAP>();
             this.CT_PHIEUXUAT = new HashSet<CT_PHIEUXUAT>();
             this.TONKHOes = new HashSet<TONKHO>();
+            this.CANHBAOs = new HashSet<CANHBAO>();
         }
     
         public string MASP { get; set; }
@@ -37,5 +38,6 @@ namespace Do_An.Model
         public virtual LOAIHANG LOAIHANG { get; set; }
         public virtual NHASANXUAT NHASANXUAT { get; set; }
         public virtual ICollection<TONKHO> TONKHOes { get; set; }
+        public virtual ICollection<CANHBAO> CANHBAOs { get; set; }
     }
 }

@@ -435,23 +435,37 @@ namespace Do_An.ViewModels.Admin
 
 
                 CapNhatTaiKhoan(tk);
-                var pcCu = db.PHANCONG_KHO
-                    .FirstOrDefault(x => x.MATK == MaTK && x.TRANGTHAI == true);
+                CapNhatTaiKhoan(tk);
 
-                if (pcCu != null)
+                var dsPhanCong = db.PHANCONG_KHO
+                    .Where(x => x.MATK == MaTK)
+                    .ToList();
+
+                foreach (var pc in dsPhanCong)
                 {
-                    pcCu.TRANGTHAI = false;
+                    pc.TRANGTHAI = false;
                 }
 
-                db.PHANCONG_KHO.Add(new PHANCONG_KHO
+                var pcMoi = dsPhanCong
+                    .FirstOrDefault(x => x.MAKHO == MaKho);
+
+                if (pcMoi != null)
                 {
-                    MATK = MaTK,
-                    MAKHO = MaKho,
-                    TRANGTHAI = true
-                });
+                    pcMoi.TRANGTHAI = true;
+                }
+                else
+                {
+                    db.PHANCONG_KHO.Add(new PHANCONG_KHO
+                    {
+                        MATK = MaTK,
+                        MAKHO = MaKho,
+                        TRANGTHAI = true
+                    });
+                }
 
                 tk.VAITROes.Clear();
                 tk.VAITROes.Add(vaiTro);
+
 
                 GhiLog(db, "Sửa tài khoản", MaTK, "Sửa thông tin tài khoản " + TenTK);
 

@@ -17,6 +17,10 @@ namespace Do_An.ViewModels.NhanVienKho
         private bool _isKhoExpanded;
         private bool _isLichSuExpanded;
         private bool _isTaiKhoanExpanded;
+        private UcNhapKhoViewModel _nhapKhoViewModel;
+        private UcXuatKhoViewModel _xuatKhoViewModel;
+        private UcKiemKeKhoViewModel _kiemKeKhoViewModel;
+        private UcTonKhoViewModel _tonKhoViewModel;
 
         public bool IsTrangChuSelected
         {
@@ -65,6 +69,17 @@ namespace Do_An.ViewModels.NhanVienKho
         }
 
 
+        private object _canhBaoView;
+        public object CanhBaoView
+        {
+            get => _canhBaoView;
+            set
+            {
+                _canhBaoView = value;
+                OnPropertyChanged();
+            }
+        }
+
         // ================= DASHBOARD DATA =================
         public string TongKho { get; set; }
         public string TongHangHoa { get; set; }
@@ -76,6 +91,9 @@ namespace Do_An.ViewModels.NhanVienKho
         public ICommand OpenKhoCommand { get; }
         public ICommand OpenHangHoaCommand { get; }
         public ICommand OpenTonKhoCommand { get; }
+        public ICommand OpenNhapKhoCommand { get; }
+        public ICommand OpenXuatKhoCommand { get; }
+        public ICommand OpenKiemKeKhoCommand { get; }
         public ICommand OpenLichSuNhapKhoCommand { get; }
         public ICommand OpenLichSuXuatKhoCommand { get; }
         public ICommand OpenLichSuKiemKeKhoCommand { get; }
@@ -98,6 +116,9 @@ namespace Do_An.ViewModels.NhanVienKho
             OpenKhoCommand = new RelayCommand(p => OpenKho());
             OpenHangHoaCommand = new RelayCommand(p => OpenHangHoa());
             OpenTonKhoCommand = new RelayCommand(p => OpenTonKho());
+            OpenNhapKhoCommand = new RelayCommand(p => OpenNhapKho());
+            OpenXuatKhoCommand = new RelayCommand(p => OpenXuatKho());
+            OpenKiemKeKhoCommand = new RelayCommand(p => OpenKiemKeKho());
             OpenLichSuNhapKhoCommand = new RelayCommand(p => OpenLichSuNhapKho());
             OpenLichSuXuatKhoCommand = new RelayCommand(p => OpenLichSuXuatKho());
             OpenLichSuKiemKeKhoCommand =new RelayCommand(p => OpenLichSuKiemKeKho());
@@ -194,12 +215,16 @@ namespace Do_An.ViewModels.NhanVienKho
 
             LoadDashboardData();
 
+            CanhBaoView = new UcCanhBao
+            {
+                DataContext = new UcCanhBaoViewModel()
+            };
+
             var uc = new UcTrangChuNhanVienKho();
             uc.DataContext = this;
 
             CurrentView = uc;
         }
-
         private void OpenKho()
         {
             ResetMenu();
@@ -273,14 +298,110 @@ namespace Do_An.ViewModels.NhanVienKho
             CurrentView = uc;
         }
 
+        private void OpenNhapKho()
+        {
+            ResetMenu();
+            IsKhoExpanded = true;
+
+            if (_nhapKhoViewModel == null)
+            {
+                _nhapKhoViewModel = new UcNhapKhoViewModel(
+                    MoFormNhapKho,
+                    OpenNhapKho,
+                    OpenTrangChu
+                );
+            }
+
+            _nhapKhoViewModel.LoadPhieuNhap();
+
+            var uc = new UcNhapKho();
+            uc.DataContext = _nhapKhoViewModel;
+
+            CurrentView = uc;
+        }
+
+        private void MoFormNhapKho()
+        {
+            var uc = new UcPhieuNhap();
+            uc.DataContext = _nhapKhoViewModel;
+
+            CurrentView = uc;
+        }
+
+        private void OpenXuatKho()
+        {
+            ResetMenu();
+            IsKhoExpanded = true;
+
+            if (_xuatKhoViewModel == null)
+            {
+                _xuatKhoViewModel = new UcXuatKhoViewModel(
+                    MoFormXuatKho,
+                    OpenXuatKho,
+                    OpenTrangChu
+                );
+            }
+
+            _xuatKhoViewModel.LoadPhieuXuat();
+
+            var uc = new UcXuatKho();
+            uc.DataContext = _xuatKhoViewModel;
+
+            CurrentView = uc;
+        }
+
+        private void MoFormXuatKho()
+        {
+            var uc = new UcPhieuXuat();
+            uc.DataContext = _xuatKhoViewModel;
+
+            CurrentView = uc;
+        }
+
+        private void OpenKiemKeKho()
+        {
+            ResetMenu();
+            IsKhoExpanded = true;
+
+            if (_kiemKeKhoViewModel == null)
+            {
+                _kiemKeKhoViewModel = new UcKiemKeKhoViewModel(
+                    MoFormKiemKeKho,
+                    OpenKiemKeKho,
+                    OpenTrangChu
+                );
+            }
+
+            _kiemKeKhoViewModel.LoadKiemKe();
+
+            var uc = new UcKiemKeKho();
+            uc.DataContext = _kiemKeKhoViewModel;
+
+            CurrentView = uc;
+        }
+
+        private void MoFormKiemKeKho()
+        {
+            var uc = new UcPhieuKiemKe();
+            uc.DataContext = _kiemKeKhoViewModel;
+
+            CurrentView = uc;
+        }
+
         private void OpenTonKho()
         {
             ResetMenu();
             IsKhoExpanded = true;
 
-            // var uc = new UcTonKho();
-            // uc.DataContext = new UcTonKhoViewModel();
-            // CurrentView = uc;
+            if (_tonKhoViewModel == null)
+                _tonKhoViewModel = new UcTonKhoViewModel(OpenTrangChu);
+
+            _tonKhoViewModel.LoadTonKho();
+
+            var uc = new UcTonKho();
+            uc.DataContext = _tonKhoViewModel;
+
+            CurrentView = uc;
         }
 
 
