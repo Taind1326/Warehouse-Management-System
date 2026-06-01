@@ -68,7 +68,9 @@
     </Compile>
     <Compile Include="Helper\BaseViewModel.cs" />
     <Compile Include="Helper\CurrentUser.cs" />
+    <Compile Include="Helper\RatioToGridLengthConverter.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
+    <Compile Include="Helper\StringToColorConverter.cs" />
     <Compile Include="Model\CT_KIEMKE.cs">
       <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
     </Compile>
@@ -132,7 +134,6 @@
     <Compile Include="Model\TONKHO.cs">
       <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\UcThongKeTongQuanModel.cs" />
     <Compile Include="Model\VAITRO.cs">
       <DependentUpon>QUANLI_KHOHANG.tt</DependentUpon>
     </Compile>
@@ -149,6 +150,7 @@
     <Compile Include="ViewModels\Admin\UcHangHoaViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcThongKeTongQuanViewModel.cs" />
+    <Compile Include="ViewModels\Shared\UcCanhBaoViewModel.cs" />
     <Compile Include="ViewModels\Shared\UcKiemKeKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcLoaiHangViewModel.cs" />
     <Compile Include="ViewModels\Shared\UcNhapKhoViewModel.cs" />

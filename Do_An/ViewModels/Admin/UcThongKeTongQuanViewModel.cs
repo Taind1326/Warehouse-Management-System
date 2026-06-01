@@ -1,91 +1,137 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using Do_An.Helper;
 using Do_An.Model;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Do_An.ViewModel
 {
     public class UcThongKeTongQuanViewModel : INotifyPropertyChanged
     {
-        // ==================== INotifyPropertyChanged ====================
+        private readonly Action _thoat;
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-        // ==================== Properties ====================
 
         private int _tongNhapKho;
         public int TongNhapKho
         {
             get => _tongNhapKho;
-            set { _tongNhapKho = value; OnPropertyChanged(); UpdateChartData(); }
+            set
+            {
+                _tongNhapKho = value;
+                OnPropertyChanged();
+                UpdateChartData();
+            }
         }
 
         private int _tongXuatKho;
         public int TongXuatKho
         {
             get => _tongXuatKho;
-            set { _tongXuatKho = value; OnPropertyChanged(); UpdateChartData(); }
+            set
+            {
+                _tongXuatKho = value;
+                OnPropertyChanged();
+                UpdateChartData();
+            }
         }
 
         private int _tongTonKho;
         public int TongTonKho
         {
             get => _tongTonKho;
-            set { _tongTonKho = value; OnPropertyChanged(); UpdateChartData(); }
+            set
+            {
+                _tongTonKho = value;
+                OnPropertyChanged();
+                UpdateChartData();
+            }
         }
-
-        // ==================== Dữ liệu cho biểu đồ ====================
 
         private List<BarItem> _chartData;
         public List<BarItem> ChartData
         {
             get => _chartData;
-            set { _chartData = value; OnPropertyChanged(); }
+            set
+            {
+                _chartData = value;
+                OnPropertyChanged();
+            }
         }
 
-        // Max để scale cột
         private double _maxValue = 1;
         public double MaxValue
         {
             get => _maxValue;
-            set { _maxValue = value; OnPropertyChanged(); }
+            set
+            {
+                _maxValue = value;
+                OnPropertyChanged();
+            }
         }
 
-        // ==================== Constructor ====================
+        public ICommand ThoatCommand { get; }
 
-        public UcThongKeTongQuanViewModel()
+        public UcThongKeTongQuanViewModel(Action thoat = null)
         {
+            _thoat = thoat;
+            ThoatCommand = new RelayCommand(_ => _thoat?.Invoke());
+
             LoadData();
         }
 
-        // ==================== Load dữ liệu mẫu ====================
-
         private void LoadData()
         {
-            // TODO: thay bằng truy vấn database thực tế
-            TongNhapKho = 320;
-            TongXuatKho = 180;
-            TongTonKho = 140;
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                TongNhapKho = db.PHIEUNHAPs.Count();
+                TongXuatKho = db.PHIEUXUATs.Count();
+                TongTonKho = db.TONKHOes.Sum(x => (int?)x.SOLUONGTON) ?? 0;
+            }
         }
-
-        // ==================== Cập nhật biểu đồ ====================
 
         private void UpdateChartData()
         {
-            double max = System.Math.Max(TongNhapKho, System.Math.Max(TongXuatKho, TongTonKho));
-            MaxValue = max < 1 ? 1 : max;
+            double max = Math.Max(TongNhapKho, Math.Max(TongXuatKho, TongTonKho));
+
+            if (max < 10)
+                max = 10;
+
+            MaxValue = max;
 
             ChartData = new List<BarItem>
             {
-                new BarItem { Label = "Nhập kho",  Value = TongNhapKho, Color = "#FF6D8B74", MaxValue = MaxValue },
-                new BarItem { Label = "Xuất kho",  Value = TongXuatKho, Color = "#FFB58A78", MaxValue = MaxValue },
-                new BarItem { Label = "Tồn kho",   Value = TongTonKho,  Color = "#FF7D9BB5", MaxValue = MaxValue },
+                new BarItem
+                {
+                    Label = "Nhập kho",
+                    Value = TongNhapKho,
+                    Color = "#FFB58A6A",
+                    MaxValue = MaxValue
+                },
+                new BarItem
+                {
+                    Label = "Xuất kho",
+                    Value = TongXuatKho,
+                    Color = "#FFC49478",
+                    MaxValue = MaxValue
+                },
+                new BarItem
+                {
+                    Label = "Tồn kho",
+                    Value = TongTonKho,
+                    Color = "#FF8B6251",
+                    MaxValue = MaxValue
+                }
             };
         }
     }
 
-    // ==================== Helper class cho từng cột ====================
     public class BarItem : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -95,7 +141,20 @@ namespace Do_An.ViewModel
         public string Color { get; set; }
         public double MaxValue { get; set; }
 
-        /// <summary>Chiều cao cột tương đối (0.0 – 1.0) để dùng với Grid RowDefinitions *</summary>
-        public double Ratio => MaxValue > 0 ? (double)Value / MaxValue : 0;
+        public double Ratio
+        {
+            get
+            {
+                if (MaxValue <= 0)
+                    return 0;
+
+                double ratio = (double)Value / MaxValue;
+
+                if (Value > 0 && ratio < 0.12)
+                    ratio = 0.12;
+
+                return ratio;
+            }
+        }
     }
 }

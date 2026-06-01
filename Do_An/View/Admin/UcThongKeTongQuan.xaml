@@ -4,43 +4,70 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Do_An.View.Admin"
+             xmlns:helper="clr-namespace:Do_An.Helper"
              mc:Ignorable="d"
-             d:DesignHeight="700" d:DesignWidth="900">
+             d:DesignHeight="700" d:DesignWidth="900"
+             Background="#FFF8F5F3">
 
     <UserControl.Resources>
 
-        <!-- ===== Converters ===== -->
-        <local:RatioToGridLengthConverter x:Key="RatioToGridLength"/>
-        <local:StringToColorConverter     x:Key="StringToColorConverter"/>
+        <helper:RatioToGridLengthConverter x:Key="RatioToGridLength"/>
+        <helper:StringToColorConverter x:Key="StringToColorConverter"/>
 
-        <!-- ===== Card style (copy từ UcTrangChu) ===== -->
         <Style x:Key="StatCardStyle" TargetType="Border">
-            <Setter Property="Background"     Value="White"/>
-            <Setter Property="BorderBrush"    Value="#FFE6DAD4"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFE6DAD4"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius"   Value="18"/>
-            <Setter Property="Padding"        Value="24,20"/>
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="Padding" Value="24,20"/>
         </Style>
 
+        <Style x:Key="ExitButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Background" Value="#FF8B6251"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.78"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Header        -->
             <RowDefinition Height="18"/>
-            <!-- Spacer        -->
             <RowDefinition Height="Auto"/>
-            <!-- 3 thẻ tổng    -->
             <RowDefinition Height="18"/>
-            <!-- Spacer        -->
             <RowDefinition Height="*"/>
-            <!-- Biểu đồ cột   -->
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ============================================================ -->
-        <!--  ROW 0 – HEADER                                              -->
-        <!-- ============================================================ -->
+        <!-- HEADER -->
         <Border Grid.Row="0"
                 Style="{StaticResource StatCardStyle}"
                 Padding="24,18">
@@ -52,13 +79,11 @@
                 <TextBlock Text="Tổng hợp tình hình nhập – xuất – tồn kho"
                            Margin="0,5,0,0"
                            FontSize="14"
-                           Foreground="#FF8F7A71"/>
+                           Foreground="#FF8D7B74"/>
             </StackPanel>
         </Border>
 
-        <!-- ============================================================ -->
-        <!--  ROW 2 – 3 THẺ NHẬP / XUẤT / TỒN                           -->
-        <!-- ============================================================ -->
+        <!-- 3 THẺ -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -68,70 +93,83 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Nhập kho -->
             <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
                         <Border Width="10" Height="10" CornerRadius="5"
-                                Background="#FF6D8B74" Margin="0,0,8,0"
+                                Background="#FFB58A6A"
+                                Margin="0,0,8,0"
                                 VerticalAlignment="Center"/>
                         <TextBlock Text="Nhập Kho"
-                                   FontSize="15" FontWeight="SemiBold"
-                                   Foreground="#FF6B463B"/>
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#FF5C3B31"/>
                     </StackPanel>
+
                     <TextBlock Text="{Binding TongNhapKho}"
                                Margin="0,12,0,4"
-                               FontSize="34" FontWeight="Bold"
+                               FontSize="34"
+                               FontWeight="Bold"
                                Foreground="#FF3E2723"/>
+
                     <TextBlock Text="Tổng phiếu nhập"
-                               FontSize="12" Foreground="#FF8D7B74"/>
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
                 </StackPanel>
             </Border>
 
-            <!-- Xuất kho -->
             <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
                         <Border Width="10" Height="10" CornerRadius="5"
-                                Background="#FFB58A78" Margin="0,0,8,0"
+                                Background="#FFC49478"
+                                Margin="0,0,8,0"
                                 VerticalAlignment="Center"/>
                         <TextBlock Text="Xuất Kho"
-                                   FontSize="15" FontWeight="SemiBold"
-                                   Foreground="#FF6B463B"/>
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#FF5C3B31"/>
                     </StackPanel>
+
                     <TextBlock Text="{Binding TongXuatKho}"
                                Margin="0,12,0,4"
-                               FontSize="34" FontWeight="Bold"
+                               FontSize="34"
+                               FontWeight="Bold"
                                Foreground="#FF3E2723"/>
+
                     <TextBlock Text="Tổng phiếu xuất"
-                               FontSize="12" Foreground="#FF8D7B74"/>
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
                 </StackPanel>
             </Border>
 
-            <!-- Tồn kho -->
             <Border Grid.Column="4" Style="{StaticResource StatCardStyle}">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
                         <Border Width="10" Height="10" CornerRadius="5"
-                                Background="#FF7D9BB5" Margin="0,0,8,0"
+                                Background="#FF8B6251"
+                                Margin="0,0,8,0"
                                 VerticalAlignment="Center"/>
                         <TextBlock Text="Tồn Kho"
-                                   FontSize="15" FontWeight="SemiBold"
-                                   Foreground="#FF6B463B"/>
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#FF5C3B31"/>
                     </StackPanel>
+
                     <TextBlock Text="{Binding TongTonKho}"
                                Margin="0,12,0,4"
-                               FontSize="34" FontWeight="Bold"
+                               FontSize="34"
+                               FontWeight="Bold"
                                Foreground="#FF3E2723"/>
+
                     <TextBlock Text="Số lượng tồn hiện tại"
-                               FontSize="12" Foreground="#FF8D7B74"/>
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
                 </StackPanel>
             </Border>
         </Grid>
 
-        <!-- ============================================================ -->
-        <!--  ROW 4 – BIỂU ĐỒ CỘT                                        -->
-        <!-- ============================================================ -->
+        <!-- BIỂU ĐỒ -->
         <Border Grid.Row="4"
                 Background="White"
                 BorderBrush="#FFE6DAD4"
@@ -142,62 +180,48 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Tiêu đề biểu đồ -->
                     <RowDefinition Height="*"/>
-                    <!-- Vùng vẽ         -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Nhãn trục X     -->
                 </Grid.RowDefinitions>
 
-                <!-- Tiêu đề -->
                 <TextBlock Grid.Row="0"
                            Text="Biểu Đồ Nhập – Xuất – Tồn Kho"
-                           FontSize="18" FontWeight="Bold"
+                           FontSize="18"
+                           FontWeight="Bold"
                            Foreground="#FF4F3127"
                            Margin="0,0,0,16"/>
 
-                <!-- Vùng vẽ cột -->
                 <ItemsControl Grid.Row="1"
                               ItemsSource="{Binding ChartData}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <!-- Các cột chia đều, có khoảng cách -->
                             <UniformGrid Rows="1"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <!--
-                                Mỗi item = 1 cột.
-                                Grid 2 hàng:
-                                  Row 0 = khoảng trống (1 - Ratio)  →  cột chưa tới
-                                  Row 1 = phần cột thực sự (Ratio)
-                            -->
                             <Grid Margin="18,0">
                                 <Grid.RowDefinitions>
-                                    <!-- Khoảng trống phía trên: tỷ lệ (1-Ratio) -->
                                     <RowDefinition Height="{Binding Ratio,
                                                             Converter={StaticResource RatioToGridLength},
                                                             ConverterParameter=Invert}"/>
-                                    <!-- Cột chính: tỷ lệ Ratio -->
                                     <RowDefinition Height="{Binding Ratio,
                                                             Converter={StaticResource RatioToGridLength}}"/>
                                 </Grid.RowDefinitions>
 
-                                <!-- Cột màu -->
                                 <Border Grid.Row="1"
                                         CornerRadius="8,8,0,0">
                                     <Border.Background>
                                         <SolidColorBrush Color="{Binding Color,
-                                                         Converter={StaticResource StringToColorConverter}}"/>
+                                            Converter={StaticResource StringToColorConverter}}"/>
                                     </Border.Background>
                                 </Border>
 
-                                <!-- Số trên đầu cột -->
                                 <TextBlock Grid.Row="0"
                                            Text="{Binding Value}"
-                                           FontSize="14" FontWeight="Bold"
+                                           FontSize="14"
+                                           FontWeight="Bold"
                                            Foreground="#FF4F3127"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Bottom"
@@ -207,14 +231,12 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <!-- Đường kẻ đáy -->
                 <Border Grid.Row="1"
                         BorderBrush="#FFE6DAD4"
                         BorderThickness="0,0,0,2"
                         VerticalAlignment="Bottom"
                         IsHitTestVisible="False"/>
 
-                <!-- Nhãn trục X -->
                 <ItemsControl Grid.Row="2"
                               ItemsSource="{Binding ChartData}"
                               Margin="0,8,0,0">
@@ -223,19 +245,26 @@
                             <UniformGrid Rows="1"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Label}"
-                                       FontSize="13" FontWeight="SemiBold"
-                                       Foreground="#FF6B463B"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#FF5C3B31"
                                        HorizontalAlignment="Center"
                                        TextAlignment="Center"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
             </Grid>
         </Border>
 
+        <!-- NÚT THOÁT -->
+        <Button Grid.Row="6"
+                Content="Thoát"
+                HorizontalAlignment="Right"
+                Style="{StaticResource ExitButtonStyle}"
+                Command="{Binding ThoatCommand}"/>
     </Grid>
 </UserControl>

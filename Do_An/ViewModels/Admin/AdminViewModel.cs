@@ -82,6 +82,17 @@ namespace Do_An.ViewModels.Admin
             set { _currentView = value; OnPropertyChanged(); }
         }
 
+
+        private object _canhBaoView;
+        public object CanhBaoView
+        {
+            get => _canhBaoView;
+            set
+            {
+                _canhBaoView = value;
+                OnPropertyChanged();
+            }
+        }
         // ================= DASHBOARD DATA =================
         public string TongNhanVien { get; set; }
         public string TongKho { get; set; }
@@ -182,11 +193,19 @@ namespace Do_An.ViewModels.Admin
             ResetMenu();
             IsTrangChuSelected = true;
 
+            LoadDashboardData();
+
+            CanhBaoView = new UcCanhBao
+            {
+                DataContext = new UcCanhBaoViewModel()
+            };
+
             var uc = new UcTrangChuAdmin();
             uc.DataContext = this;
 
             CurrentView = uc;
         }
+
 
         private void OpenNhanVien()
         {
@@ -514,7 +533,7 @@ namespace Do_An.ViewModels.Admin
             IsThongKeExpanded = true;
 
             var uc = new UcThongKeTongQuan();
-            uc.DataContext = new UcThongKeTongQuanViewModel();
+            uc.DataContext = new UcThongKeTongQuanViewModel(OpenTrangChu);
 
             CurrentView = uc;
         }
