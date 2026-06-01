@@ -225,7 +225,7 @@
                            AllowsTransparency="True"
                            PopupAnimation="Fade"
                            IsOpen="{Binding IsMenuTaiKhoanOpen}">
-                        
+
                         <Border Width="180"
                                 Margin="0,5,0,0"
                                 Background="White"
@@ -257,14 +257,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="18"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="18"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
                     Style="{StaticResource DashboardCardButtonStyle}"
                     Command="{Binding OpenNhanVienCommand}">
-                
+
                 <StackPanel>
                     <TextBlock Text="Nhân viên"
                                FontSize="15"
@@ -285,13 +283,13 @@
             <Button Grid.Column="2"
                     Style="{StaticResource DashboardCardButtonStyle}"
                     Command="{Binding OpenKhoCommand}">
-                
+
                 <StackPanel>
                     <TextBlock Text="Kho hàng"
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="#FF6B463B"/>
-                    
+
                     <TextBlock Text="{Binding TongKho}"
                                Margin="0,12,0,4"
                                FontSize="34"
@@ -307,13 +305,13 @@
             <Button Grid.Column="4"
                     Style="{StaticResource DashboardCardButtonStyle}"
                     Command="{Binding OpenHangHoaCommand}">
-                
+
                 <StackPanel>
                     <TextBlock Text="Hàng hóa"
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="#FF6B463B"/>
-                    
+
                     <TextBlock Text="{Binding TongHangHoa}"
                                Margin="0,12,0,4"
                                FontSize="34"
@@ -326,27 +324,6 @@
                 </StackPanel>
             </Button>
 
-            <Button Grid.Column="6"
-                    Style="{StaticResource DashboardCardButtonStyle}"
-                    Command="{Binding OpenThongKeCommand}">
-                
-                <StackPanel>
-                    <TextBlock Text="Thống kê"
-                               FontSize="15"
-                               FontWeight="SemiBold"
-                               Foreground="#FF6B463B"/>
-                    
-                    <TextBlock Text="{Binding TongBaoCaoThang}"
-                               Margin="0,12,0,4"
-                               FontSize="34"
-                               FontWeight="Bold"
-                               Foreground="#FF3E2723"/>
-
-                    <TextBlock Text="Báo cáo trong tháng"
-                               FontSize="12"
-                               Foreground="#FF8D7B74"/>
-                </StackPanel>
-            </Button>
         </Grid>
 
         <!-- Nội dung -->
@@ -362,54 +339,10 @@
                     BorderBrush="#FFE6DAD4"
                     BorderThickness="1"
                     CornerRadius="18"
-                    Padding="24">
-                <StackPanel>
-                    <TextBlock Text="Tổng quan hệ thống"
-                               FontSize="20"
-                               FontWeight="Bold"
-                               Foreground="#FF4E342E"/>
+                    Padding="0">
 
-                    <TextBlock Text="Đây là khu vực mặc định khi người dùng đăng nhập vào hệ thống. Sau này có thể thay phần này bằng UserControl Trang chủ hoặc các UserControl khác."
-                               Margin="0,12,0,0"
-                               FontSize="14"
-                               Foreground="#FF776760"
-                               TextWrapping="Wrap"/>
-
-                    <Border Margin="0,22,0,0"
-                            Background="#FFF9F4F1"
-                            BorderBrush="#FFE9DCD6"
-                            BorderThickness="1"
-                            CornerRadius="14"
-                            Padding="18">
-                        
-                        <StackPanel>
-                            <TextBlock Text="Gợi ý cấu trúc:"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Foreground="#FF5D4037"/>
-                            
-                            <TextBlock Text="• Trang chủ: tổng quan nhanh"
-                                       Margin="0,12,0,4"
-                                       FontSize="13"
-                                       Foreground="#FF6D5C56"/>
-                            
-                            <TextBlock Text="• Nhân viên: danh sách, tài khoản, phân quyền"
-                                       Margin="0,0,0,4"
-                                       FontSize="13"
-                                       Foreground="#FF6D5C56"/>
-                            
-                            <TextBlock Text="• Kho: danh sách kho, tồn kho, chuyển kho"
-                                       Margin="0,0,0,4"
-                                       FontSize="13"
-                                       Foreground="#FF6D5C56"/>
-                            
-                            <TextBlock Text="• Hàng hóa: danh mục, loại hàng, đơn vị tính"
-                                       Margin="0,0,0,4"
-                                       FontSize="13"
-                                       Foreground="#FF6D5C56"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                <ContentControl Content="{Binding CanhBaoView}"
+                    Margin="0"/>
             </Border>
 
             <Border Grid.Column="2"
@@ -418,7 +351,7 @@
                     BorderThickness="1"
                     CornerRadius="18"
                     Padding="24">
-                
+
                 <StackPanel>
                     <TextBlock Text="Thông báo"
                                FontSize="20"
@@ -431,7 +364,7 @@
                             BorderThickness="1"
                             CornerRadius="12"
                             Padding="14">
-                        
+
                         <TextBlock Text="• Kiểm tra số lượng tồn kho định kỳ."
                                    FontSize="13"
                                    Foreground="#FF6D5C56"
@@ -444,7 +377,7 @@
                             BorderThickness="1"
                             CornerRadius="12"
                             Padding="14">
-                        
+
                         <TextBlock Text="• Cập nhật phiếu nhập và phiếu xuất đầy đủ."
                                    FontSize="13"
                                    Foreground="#FF6D5C56"
@@ -456,7 +389,7 @@
                             BorderThickness="1"
                             CornerRadius="12"
                             Padding="14">
-                        
+
                         <TextBlock Text="• Theo dõi nhật ký hệ thống để kiểm tra thao tác người dùng."
                                    FontSize="13"
                                    Foreground="#FF6D5C56"

@@ -2,6 +2,7 @@
 using Do_An.Model;
 using Do_An.View.Admin;
 using Do_An.View.Shared;
+using Do_An.ViewModel;
 using Do_An.ViewModels.Shared;
 using System;
 using System.Linq;
@@ -512,8 +513,8 @@ namespace Do_An.ViewModels.Admin
             ResetMenu();
             IsThongKeExpanded = true;
 
-            var uc = new UcTongQuanThongKe();
-            uc.DataContext = new UcTongQuanThongKeViewModel(OpenTrangChu);
+            var uc = new UcThongKeTongQuan();
+            uc.DataContext = new UcThongKeTongQuanViewModel();
 
             CurrentView = uc;
         }
