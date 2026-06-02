@@ -406,8 +406,14 @@
                                 <Button Style="{StaticResource SubMenuButtonStyle}" 
                                         Command="{Binding OpenThongKeXuatKhoCommand}"
                                         Content="• Thống kê xuất kho"/>
-                                <Button Style="{StaticResource SubMenuButtonStyle}" Content="• Thống kê tồn kho"/>
-                                <Button Style="{StaticResource SubMenuButtonStyle}" Content="• Thống kê giá trị kho"/>
+                                
+                                <Button Style="{StaticResource SubMenuButtonStyle}" 
+                                        Command="{Binding OpenThongKeTonKhoCommand}"
+                                        Content="• Thống kê tồn kho"/>
+                                
+                                <Button Style="{StaticResource SubMenuButtonStyle}" 
+                                        Command="{Binding OpenThongKeGiaTriKhoCommand}"
+                                        Content="• Thống kê giá trị kho"/>
                             </StackPanel>
                             
                         </Expander>

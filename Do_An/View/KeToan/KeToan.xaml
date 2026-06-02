@@ -376,11 +376,11 @@
                             <StackPanel>
                                 <Button Style="{StaticResource SubMenuButtonStyle}"
                                         Content="• Thống kê phiếu nhập"
-                                        Command="{Binding ThongKePhieuNhapCommand}"/>
+                                        Command="{Binding ThongKeNhapKhoCommand}"/>
 
                                 <Button Style="{StaticResource SubMenuButtonStyle}"
                                         Content="• Thống kê phiếu xuất"
-                                        Command="{Binding ThongKePhieuXuatCommand}"/>
+                                        Command="{Binding ThongKeXuatKhoCommand}"/>
                             </StackPanel>
                         </Expander>
 

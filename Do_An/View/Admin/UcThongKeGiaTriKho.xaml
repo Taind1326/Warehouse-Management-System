@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Do_An.View.Shared.UcThongKeNhapKho"
+﻿<UserControl x:Class="Do_An.View.Admin.UcThongKeGiaTriKho"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,8 +14,6 @@
         <helper:StringToColorConverter x:Key="StringToColorConverter"/>
 
         <SolidColorBrush x:Key="CardBorderBrush" Color="#FFE6DAD4"/>
-        <SolidColorBrush x:Key="PrimaryTextBrush" Color="#FF5C3B31"/>
-        <SolidColorBrush x:Key="SecondaryTextBrush" Color="#FF8D7B74"/>
         <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="#FFF6EEEA"/>
         <SolidColorBrush x:Key="ExitButtonBrush" Color="#FF8B6251"/>
 
@@ -172,12 +170,12 @@
                 Style="{StaticResource CardStyle}"
                 Padding="24,18">
             <StackPanel>
-                <TextBlock Text="Thống Kê Nhập Kho"
+                <TextBlock Text="Thống Kê Giá Trị Kho"
                            FontSize="31"
                            FontWeight="Bold"
                            Foreground="#FF4F3127"/>
 
-                <TextBlock Text="Tổng hợp số phiếu, số lượng và giá trị nhập kho"
+                <TextBlock Text="Tổng hợp giá trị nhập, xuất và tồn kho"
                            Margin="0,5,0,0"
                            FontSize="14"
                            Foreground="#FF8D7B74"/>
@@ -203,19 +201,19 @@
                                 CornerRadius="5"
                                 VerticalAlignment="Center"/>
 
-                        <TextBlock Text="Phiếu Nhập"
+                        <TextBlock Text="Giá Trị Kho"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#FF5C3B31"/>
                     </StackPanel>
 
-                    <TextBlock Text="{Binding TongPhieuNhap}"
+                    <TextBlock Text="{Binding TongGiaTriKhoText}"
                                Margin="0,12,0,4"
-                               FontSize="34"
+                               FontSize="28"
                                FontWeight="Bold"
                                Foreground="#FF3E2723"/>
 
-                    <TextBlock Text="Tổng số phiếu nhập"
+                    <TextBlock Text="Tổng giá trị tồn kho"
                                FontSize="12"
                                Foreground="#FF8D7B74"/>
                 </StackPanel>
@@ -231,19 +229,19 @@
                                 CornerRadius="5"
                                 VerticalAlignment="Center"/>
 
-                        <TextBlock Text="Số Lượng"
+                        <TextBlock Text="Nhập Kho"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#FF5C3B31"/>
                     </StackPanel>
 
-                    <TextBlock Text="{Binding TongSoLuongNhap}"
+                    <TextBlock Text="{Binding TongGiaTriNhapText}"
                                Margin="0,12,0,4"
-                               FontSize="34"
+                               FontSize="28"
                                FontWeight="Bold"
                                Foreground="#FF3E2723"/>
 
-                    <TextBlock Text="Tổng sản phẩm đã nhập"
+                    <TextBlock Text="Tổng giá trị nhập kho"
                                FontSize="12"
                                Foreground="#FF8D7B74"/>
                 </StackPanel>
@@ -259,19 +257,19 @@
                                 CornerRadius="5"
                                 VerticalAlignment="Center"/>
 
-                        <TextBlock Text="Giá Trị"
+                        <TextBlock Text="Xuất Kho"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#FF5C3B31"/>
                     </StackPanel>
 
-                    <TextBlock Text="{Binding TongGiaTriNhapText}"
+                    <TextBlock Text="{Binding TongGiaTriXuatText}"
                                Margin="0,12,0,4"
                                FontSize="28"
                                FontWeight="Bold"
                                Foreground="#FF3E2723"/>
 
-                    <TextBlock Text="Tổng giá trị nhập kho"
+                    <TextBlock Text="Tổng giá trị xuất kho"
                                FontSize="12"
                                Foreground="#FF8D7B74"/>
                 </StackPanel>
@@ -300,7 +298,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0"
-                               Text="Biểu Đồ Nhập Kho Theo Kho"
+                               Text="Biểu Đồ Giá Trị Kho Theo Kho"
                                Margin="0,0,0,16"
                                FontSize="18"
                                FontWeight="Bold"
@@ -316,7 +314,7 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="14,0">
+                                <Grid Margin="8,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="{Binding Ratio,
                                             Converter={StaticResource RatioToGridLength},
@@ -335,13 +333,14 @@
                                     </Border>
 
                                     <TextBlock Grid.Row="0"
-                                               Text="{Binding Value}"
-                                               Margin="0,0,0,6"
-                                               FontSize="14"
+                                               Text="{Binding Value, StringFormat={}{0:N0}}"
+                                               Margin="0,0,0,10"
+                                               FontSize="13"
                                                FontWeight="Bold"
                                                Foreground="#FF4F3127"
                                                HorizontalAlignment="Center"
-                                               VerticalAlignment="Bottom"/>
+                                               VerticalAlignment="Bottom"
+                                               Panel.ZIndex="10"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -392,19 +391,19 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0">
-                        <TextBlock Text="Top Sản Phẩm Nhập Nhiều"
+                        <TextBlock Text="Top Giá Trị Tồn Kho"
                                    FontSize="18"
                                    FontWeight="Bold"
                                    Foreground="#FF4F3127"/>
 
-                        <TextBlock Text="Danh sách sản phẩm có số lượng nhập cao"
+                        <TextBlock Text="Danh sách sản phẩm có giá trị tồn cao"
                                    Margin="0,4,0,0"
                                    FontSize="12"
                                    Foreground="#FF8D7B74"/>
                     </StackPanel>
 
                     <DataGrid Grid.Row="2"
-                              ItemsSource="{Binding DanhSachTopSanPham}"
+                              ItemsSource="{Binding DanhSachTopGiaTri}"
                               Style="{StaticResource TopDataGridStyle}"
                               ColumnHeaderStyle="{StaticResource TopDataGridHeaderStyle}"
                               CellStyle="{StaticResource TopDataGridCellStyle}"
@@ -412,26 +411,25 @@
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="STT"
-                                                Width="58"
+                                                Width="45"
                                                 Binding="{Binding STT}"
                                                 HeaderStyle="{StaticResource CenterHeaderStyle}"
                                                 ElementStyle="{StaticResource CenterCellTextStyle}"/>
 
                             <DataGridTextColumn Header="Sản phẩm"
                                                 Width="*"
-                                                MinWidth="115"
+                                                MinWidth="105"
                                                 Binding="{Binding TenSanPham}"
                                                 HeaderStyle="{StaticResource ProductHeaderStyle}"
                                                 ElementStyle="{StaticResource ProductCellTextStyle}"/>
 
-                            <DataGridTextColumn Header="SL"
-                                                Width="45"
-                                                Binding="{Binding SoLuongNhap}"
-                                                HeaderStyle="{StaticResource CenterHeaderStyle}"
-                                                ElementStyle="{StaticResource CenterCellTextStyle}"/>
+                            <DataGridTextColumn Header="Kho"
+                                                Width="80"
+                                                Binding="{Binding TenKho}"
+                                                ElementStyle="{StaticResource CellTextStyle}"/>
 
                             <DataGridTextColumn Header="Giá trị"
-                                                Width="120"
+                                                Width="130"
                                                 Binding="{Binding GiaTriText}"
                                                 ElementStyle="{StaticResource CellTextStyle}"/>
                         </DataGrid.Columns>

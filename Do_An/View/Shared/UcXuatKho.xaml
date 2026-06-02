@@ -241,12 +241,20 @@
               Margin="18,0,18,18">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                
+
+                <Button Style="{StaticResource PillButtonStyle}"
+                        Width="120"
+                        Margin="0,0,30,0"
+                        Background="{StaticResource EditButtonBrush}"
+                        Content="In phiếu"
+                        Command="{Binding InPhieuCommand}"/>
+
                 <Button Style="{StaticResource PillButtonStyle}"
                         Width="110"
                         Background="{StaticResource ExitButtonBrush}"
                         Content="Thoát"
                         Command="{Binding ThoatCommand}"/>
+
             </StackPanel>
         </Grid>
 

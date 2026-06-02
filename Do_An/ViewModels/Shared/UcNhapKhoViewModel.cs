@@ -178,7 +178,7 @@ namespace Do_An.ViewModels.Shared
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                if (LaAdmin(db) || LaKeToan(db))
+                if (LaAdmin(db))
                 {
                     DanhSachKho = new ObservableCollection<string>(
                         db.KHOes.Select(x => x.TENKHO).ToList());
@@ -196,9 +196,9 @@ namespace Do_An.ViewModels.Shared
                     db.NHASANXUATs.Select(x => x.TENNSX).ToList());
 
                 DanhSachNguoiLap = new ObservableCollection<string>
-                {
-                    CurrentUser.TenTK
-                };
+        {
+            CurrentUser.TenTK
+        };
 
                 NguoiLapDuocChon = CurrentUser.TenTK;
 
@@ -220,11 +220,11 @@ namespace Do_An.ViewModels.Shared
             }
 
             DanhSachTrangThai = new ObservableCollection<string>
-            {
-                "Lưu tạm",
-                "Đã nhập",
-                "Đã hủy"
-            };
+    {
+        "Lưu tạm",
+        "Đã nhập",
+        "Đã hủy"
+    };
 
             OnPropertyChanged(nameof(DanhSachKho));
             OnPropertyChanged(nameof(DanhSachNhaSanXuat));
@@ -854,7 +854,7 @@ namespace Do_An.ViewModels.Shared
 
         private IQueryable<PHIEUNHAP> LocPhieuNhapTheoTaiKhoan(QUANLI_KHOHANGEntities db)
         {
-            if (LaAdmin(db) || LaKeToan(db))
+            if (LaAdmin(db))
                 return db.PHIEUNHAPs;
 
             return db.PHIEUNHAPs.Where(pn =>

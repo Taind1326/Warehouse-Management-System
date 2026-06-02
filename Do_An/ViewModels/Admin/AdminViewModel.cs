@@ -117,6 +117,8 @@ namespace Do_An.ViewModels.Admin
         public ICommand OpenTonKhoCommand { get; }
         public ICommand OpenThongKeNhapKhoCommand { get; }
         public ICommand OpenThongKeXuatKhoCommand { get; }
+        public ICommand OpenThongKeTonKhoCommand { get; }
+        public ICommand OpenThongKeGiaTriKhoCommand { get; }
 
         public ICommand ToggleNhanVienCommand { get; }
         public ICommand ToggleKhoCommand { get; }
@@ -149,6 +151,8 @@ namespace Do_An.ViewModels.Admin
             OpenTonKhoCommand = new RelayCommand(p => OpenTonKho());
             OpenThongKeNhapKhoCommand = new RelayCommand(p => OpenThongKeNhapKho());
             OpenThongKeXuatKhoCommand = new RelayCommand(p => OpenThongKeXuatKho());
+            OpenThongKeTonKhoCommand = new RelayCommand(p => OpenThongKeTonKho());
+            OpenThongKeGiaTriKhoCommand = new RelayCommand(p => OpenThongKeGiaTriKho());
 
             // EXPAND
             ToggleNhanVienCommand = new RelayCommand(p => ToggleNhanVien());
@@ -564,6 +568,30 @@ namespace Do_An.ViewModels.Admin
 
             CurrentView = uc;
         }
+
+        private void OpenThongKeTonKho()
+        {
+            ResetMenu();
+            IsThongKeExpanded = true;
+
+            var uc = new UcThongKeTonKho();
+            uc.DataContext = new UcThongKeTonKhoViewModel(OpenTrangChu);
+
+            CurrentView = uc;
+        }
+
+        private void OpenThongKeGiaTriKho()
+        {
+            ResetMenu();
+            IsThongKeExpanded = true;
+
+            var uc = new UcThongKeGiaTriKho();
+            uc.DataContext = new UcThongKeGiaTriKhoViewModel(OpenTrangChu);
+
+            CurrentView = uc;
+        }
+
+
 
         // ================= TOGGLE =================
         private void ToggleNhanVien()

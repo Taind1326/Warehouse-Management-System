@@ -72,24 +72,6 @@
             </Setter>
         </Style>
 
-        <Style x:Key="AccountHeaderButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Opacity" Value="1"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Opacity" Value="0.93"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Opacity" Value="0.85"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
         <Style x:Key="AccountPopupButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="38"/>
             <Setter Property="Margin" Value="6,4"/>
@@ -105,12 +87,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="10">
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10">
                             <ContentPresenter VerticalAlignment="Center"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      Margin="{TemplateBinding Padding}"/>
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"/>
                         </Border>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bd" Property="Background" Value="#FFF8F2EF"/>
@@ -123,7 +106,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
     </UserControl.Resources>
 
     <Grid Margin="20">
@@ -133,7 +115,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
         <Border Grid.Row="0"
                 Background="White"
                 BorderBrush="{StaticResource CardBorderBrush}"
@@ -151,6 +132,7 @@
                                FontSize="31"
                                FontWeight="Bold"
                                Foreground="#FF4F3127"/>
+
                     <TextBlock Text="Tổng quan khu vực làm việc của kế toán"
                                Margin="0,5,0,0"
                                FontSize="14"
@@ -158,75 +140,72 @@
                 </StackPanel>
 
                 <Grid Grid.Column="1"
-      Width="180"
-      HorizontalAlignment="Right"
-      VerticalAlignment="Center">
+                      Width="180"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center">
 
                     <Button x:Name="btnTaiKhoan"
-            Height="52"
-            Background="#FFF8F2EF"
-            BorderBrush="#FFE8DCD5"
-            BorderThickness="1"
-            Cursor="Hand"
-            Padding="0"
-            FocusVisualStyle="{x:Null}"
-            Focusable="False"
-            Command="{Binding ToggleMenuTaiKhoanCommand}">
-
+                            Height="52"
+                            Background="#FFF8F2EF"
+                            BorderBrush="#FFE8DCD5"
+                            BorderThickness="1"
+                            Cursor="Hand"
+                            Padding="0"
+                            FocusVisualStyle="{x:Null}"
+                            Focusable="False"
+                            Command="{Binding ToggleMenuTaiKhoanCommand}">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="14">
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="14">
                                     <ContentPresenter/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
 
                         <StackPanel Orientation="Horizontal"
-                    Margin="16,0"
-                    VerticalAlignment="Center">
+                                    Margin="16,0"
+                                    VerticalAlignment="Center">
                             <TextBlock Text="👤"
-                       FontSize="16"
-                       VerticalAlignment="Center"/>
+                                       FontSize="16"
+                                       VerticalAlignment="Center"/>
 
                             <StackPanel Margin="10,0,0,0">
                                 <TextBlock Text="Xin chào"
-                           FontSize="13"
-                           FontWeight="SemiBold"
-                           Foreground="#FF5D4037"/>
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="#FF5D4037"/>
 
                                 <TextBlock Text="Kế toán"
-                           FontSize="11"
-                           Foreground="#FF8F7A71"/>
+                                           FontSize="11"
+                                           Foreground="#FF8F7A71"/>
                             </StackPanel>
                         </StackPanel>
                     </Button>
 
                     <Popup PlacementTarget="{Binding ElementName=btnTaiKhoan}"
-           Placement="Bottom"
-           StaysOpen="False"
-           AllowsTransparency="True"
-           PopupAnimation="Fade"
-           IsOpen="{Binding IsMenuTaiKhoanOpen}">
-
+                           Placement="Bottom"
+                           StaysOpen="False"
+                           AllowsTransparency="True"
+                           PopupAnimation="Fade"
+                           IsOpen="{Binding IsMenuTaiKhoanOpen}">
                         <Border Width="180"
-                Margin="0,5,0,0"
-                Background="White"
-                BorderBrush="#FFE6DAD4"
-                BorderThickness="1"
-                CornerRadius="10">
-
+                                Margin="0,5,0,0"
+                                Background="White"
+                                BorderBrush="#FFE6DAD4"
+                                BorderThickness="1"
+                                CornerRadius="10">
                             <StackPanel>
                                 <Button Content="Thông tin cá nhân"
-                        Command="{Binding ThongTinTaiKhoanCommand}"
-                        Style="{StaticResource AccountPopupButtonStyle}"/>
+                                        Command="{Binding ThongTinTaiKhoanCommand}"
+                                        Style="{StaticResource AccountPopupButtonStyle}"/>
 
                                 <Button Content="Đăng xuất"
-                        Command="{Binding DangXuatCommand}"
-                        Style="{StaticResource AccountPopupButtonStyle}"
-                        Foreground="Red"/>
+                                        Command="{Binding DangXuatCommand}"
+                                        Style="{StaticResource AccountPopupButtonStyle}"
+                                        Foreground="Red"/>
                             </StackPanel>
                         </Border>
                     </Popup>
@@ -234,7 +213,6 @@
             </Grid>
         </Border>
 
-        <!-- Thẻ thống kê -->
         <Grid Grid.Row="1" Margin="0,18,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -252,14 +230,17 @@
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="#FF6B463B"/>
-                    <TextBlock Text="18"
+
+                    <TextBlock Text="{Binding TongPhieuNhap}"
                                Margin="0,12,0,4"
                                FontSize="34"
                                FontWeight="Bold"
                                Foreground="#FF3E2723"/>
-                    <TextBlock Text="Tổng phiếu nhập trong tháng"
+
+                    <TextBlock Text="Mở danh sách và lập phiếu nhập kho"
                                FontSize="12"
-                               Foreground="{StaticResource SoftTextBrush}"/>
+                               Foreground="{StaticResource SoftTextBrush}"
+                               TextWrapping="Wrap"/>
                 </StackPanel>
             </Button>
 
@@ -271,40 +252,44 @@
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="#FF6B463B"/>
-                    <TextBlock Text="12"
+
+                    <TextBlock Text="{Binding TongPhieuXuat}"
                                Margin="0,12,0,4"
                                FontSize="34"
                                FontWeight="Bold"
                                Foreground="#FF3E2723"/>
-                    <TextBlock Text="Tổng phiếu xuất trong tháng"
+
+                    <TextBlock Text="Mở danh sách và lập phiếu xuất kho"
                                FontSize="12"
-                               Foreground="{StaticResource SoftTextBrush}"/>
+                               Foreground="{StaticResource SoftTextBrush}"
+                               TextWrapping="Wrap"/>
                 </StackPanel>
             </Button>
 
             <Button Grid.Column="4"
                     Style="{StaticResource ThongKeCardButtonStyle}"
-                    Command="{Binding ThongKePhieuNhapCommand}">
+                    Command="{Binding ThongKeNhapKhoCommand}">
                 <StackPanel>
-                    <TextBlock Text="Giá trị nhập"
+                    <TextBlock Text="Thống kê nhập"
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="#FF6B463B"/>
-                    <TextBlock Margin="0,12,0,4"
-                               FontSize="34"
+
+                    <TextBlock Text="{Binding TongGiaTriNhapText}"
+                               Margin="0,12,0,4"
+                               FontSize="30"
                                FontWeight="Bold"
                                Foreground="#FF3E2723"
-                               TextAlignment="Left">
-                        1,200,000,000
-                    </TextBlock>
-                    <TextBlock Text="Tổng giá trị hàng đã nhập trong tháng"
+                               TextAlignment="Left"/>
+
+                    <TextBlock Text="Xem số phiếu, số lượng và giá trị nhập kho"
                                FontSize="12"
-                               Foreground="{StaticResource SoftTextBrush}"/>
+                               Foreground="{StaticResource SoftTextBrush}"
+                               TextWrapping="Wrap"/>
                 </StackPanel>
             </Button>
         </Grid>
 
-        <!-- Nội dung -->
         <Grid Grid.Row="2" Margin="0,18,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -324,7 +309,7 @@
                                FontWeight="Bold"
                                Foreground="#FF4E342E"/>
 
-                    <TextBlock Text="Đây là khu vực mặc định khi tài khoản kế toán đăng nhập vào hệ thống. Sau này có thể thay phần này bằng UserControl Trang chủ kế toán hoặc các UserControl chức năng tương ứng."
+                    <TextBlock Text="Khu vực kế toán hỗ trợ theo dõi chứng từ nhập kho, xuất kho và xem báo cáo thống kê nhập kho theo phạm vi kho được phân công."
                                Margin="0,12,0,0"
                                FontSize="14"
                                Foreground="#FF776760"
@@ -337,23 +322,22 @@
                             CornerRadius="14"
                             Padding="18">
                         <StackPanel>
-                            <TextBlock Text="Gợi ý cấu trúc:"
+                            <TextBlock Text="Chức năng chính:"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Foreground="#FF5D4037"/>
-                            <TextBlock Text="• Trang chủ: tổng quan nhanh cho kế toán"
+
+                            <TextBlock Text="• Phiếu nhập: xem danh sách phiếu nhập trong kho được phân công"
                                        Margin="0,12,0,4"
                                        FontSize="13"
                                        Foreground="#FF6D5C56"/>
-                            <TextBlock Text="• Chứng từ: phiếu nhập, phiếu xuất"
+
+                            <TextBlock Text="• Phiếu xuất: xem danh sách phiếu xuất trong kho được phân công"
                                        Margin="0,0,0,4"
                                        FontSize="13"
                                        Foreground="#FF6D5C56"/>
-                            <TextBlock Text="• Thống kê: báo cáo phiếu nhập, báo cáo phiếu xuất"
-                                       Margin="0,0,0,4"
-                                       FontSize="13"
-                                       Foreground="#FF6D5C56"/>
-                            <TextBlock Text="• Tài khoản: thông tin tài khoản, đổi mật khẩu"
+
+                            <TextBlock Text="• Thống kê nhập: tổng hợp số phiếu, số lượng và giá trị nhập kho"
                                        Margin="0,0,0,4"
                                        FontSize="13"
                                        Foreground="#FF6D5C56"/>
@@ -380,7 +364,7 @@
                             BorderThickness="1"
                             CornerRadius="12"
                             Padding="14">
-                        <TextBlock Text="• Kiểm tra đầy đủ chứng từ nhập và xuất trước khi lưu."
+                        <TextBlock Text="• Kế toán chỉ được xem chứng từ thuộc kho được phân công."
                                    FontSize="13"
                                    Foreground="#FF6D5C56"
                                    TextWrapping="Wrap"/>

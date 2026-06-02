@@ -4,6 +4,7 @@ using Do_An.View.KeToan;
 using Do_An.View.Shared;
 using Do_An.ViewModels.Shared;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -16,6 +17,7 @@ namespace Do_An.ViewModels.KeToan
         private bool _isChungTuExpanded;
         private bool _isThongKeExpanded;
         private bool _isTaiKhoanExpanded;
+        private bool _isMenuTaiKhoanOpen;
 
         public bool IsTrangChuSelected
         {
@@ -41,13 +43,40 @@ namespace Do_An.ViewModels.KeToan
             set { _isTaiKhoanExpanded = value; OnPropertyChanged(); }
         }
 
-        private bool _isMenuTaiKhoanOpen;
         public bool IsMenuTaiKhoanOpen
         {
             get => _isMenuTaiKhoanOpen;
             set { _isMenuTaiKhoanOpen = value; OnPropertyChanged(); }
         }
 
+        private int _tongPhieuNhap;
+        public int TongPhieuNhap
+        {
+            get => _tongPhieuNhap;
+            set { _tongPhieuNhap = value; OnPropertyChanged(); }
+        }
+
+        private int _tongPhieuXuat;
+        public int TongPhieuXuat
+        {
+            get => _tongPhieuXuat;
+            set { _tongPhieuXuat = value; OnPropertyChanged(); }
+        }
+
+        private decimal _tongGiaTriNhap;
+        public decimal TongGiaTriNhap
+        {
+            get => _tongGiaTriNhap;
+            set
+            {
+                _tongGiaTriNhap = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TongGiaTriNhapText));
+            }
+        }
+
+        public string TongGiaTriNhapText =>
+            TongGiaTriNhap.ToString("N0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) + " đ";
 
         // ================= CURRENT VIEW =================
         private object _currentView;
@@ -61,8 +90,10 @@ namespace Do_An.ViewModels.KeToan
         public ICommand TrangChuCommand { get; }
         public ICommand PhieuNhapCommand { get; }
         public ICommand PhieuXuatCommand { get; }
-        public ICommand OpenThongKeXuatKhoCommand { get; }
-        public ICommand ThongKePhieuXuatCommand { get; }
+
+        public ICommand ThongKeNhapKhoCommand { get; }
+        public ICommand ThongKeXuatKhoCommand { get; }
+
         public ICommand ThongTinTaiKhoanCommand { get; }
         public ICommand DoiMatKhauCommand { get; }
         public ICommand DangXuatCommand { get; }
@@ -75,25 +106,24 @@ namespace Do_An.ViewModels.KeToan
         // ================= CONSTRUCTOR =================
         public KeToanViewModel()
         {
-            // NAVIGATION
             TrangChuCommand = new RelayCommand(_ => OpenTrangChu());
+
             PhieuNhapCommand = new RelayCommand(_ => OpenPhieuNhap());
             PhieuXuatCommand = new RelayCommand(_ => OpenPhieuXuat());
-            //ThongKeNhapKhoCommand = new RelayCommand(_ => OpenThongKeNhapKho());
-            ThongKePhieuXuatCommand = new RelayCommand(_ => OpenThongKePhieuXuat());
+
+            ThongKeNhapKhoCommand = new RelayCommand(_ => OpenThongKeNhapKho());
+            ThongKeXuatKhoCommand = new RelayCommand(_ => OpenThongKeXuatKho());
+
             ThongTinTaiKhoanCommand = new RelayCommand(_ => OpenThongTinTaiKhoan());
             DoiMatKhauCommand = new RelayCommand(_ => OpenDoiMatKhau());
+            DangXuatCommand = new RelayCommand(_ => DangXuat());
 
-            // TOGGLE
             ToggleChungTuCommand = new RelayCommand(_ => ToggleChungTu());
             ToggleThongKeCommand = new RelayCommand(_ => ToggleThongKe());
             ToggleTaiKhoanCommand = new RelayCommand(_ => ToggleTaiKhoan());
             ToggleMenuTaiKhoanCommand = new RelayCommand(_ => ToggleMenuTaiKhoan());
+            LoadTongQuan();
 
-            // ACCOUNT
-            DangXuatCommand = new RelayCommand(_ => DangXuat());
-
-            // INIT
             OpenTrangChu();
         }
 
@@ -114,7 +144,13 @@ namespace Do_An.ViewModels.KeToan
             ResetMenu();
             IsChungTuExpanded = true;
 
-            CurrentView = new UcTrangChuKeToan();
+            var uc = new UcNhapKho();
+            uc.DataContext = new UcNhapKhoViewModel(
+                moForm: null,
+                quayLaiDanhSach: null,
+                veTrangChu: OpenTrangChu);
+
+            CurrentView = uc;
         }
 
         private void OpenPhieuXuat()
@@ -122,23 +158,35 @@ namespace Do_An.ViewModels.KeToan
             ResetMenu();
             IsChungTuExpanded = true;
 
-            CurrentView = new UcTrangChuKeToan();
+            var uc = new UcXuatKho();
+            uc.DataContext = new UcXuatKhoViewModel(
+                moForm: null,
+                quayLaiDanhSach: null,
+                veTrangChu: OpenTrangChu);
+
+            CurrentView = uc;
         }
 
-        private void OpenThongKePhieuNhap()
+        private void OpenThongKeNhapKho()
         {
             ResetMenu();
             IsThongKeExpanded = true;
 
-            CurrentView = new UcTrangChuKeToan();
+            var uc = new UcThongKeNhapKho();
+            uc.DataContext = new UcThongKeNhapKhoViewModel(OpenTrangChu);
+
+            CurrentView = uc;
         }
 
-        private void OpenThongKePhieuXuat()
+        private void OpenThongKeXuatKho()
         {
             ResetMenu();
             IsThongKeExpanded = true;
 
-            CurrentView = new UcTrangChuKeToan();
+            var uc = new UcThongKeXuatKho();
+            uc.DataContext = new UcThongKeXuatKhoViewModel(OpenTrangChu);
+
+            CurrentView = uc;
         }
 
         private void OpenThongTinTaiKhoan()
@@ -185,12 +233,42 @@ namespace Do_An.ViewModels.KeToan
             IsTaiKhoanExpanded = !dangMo;
         }
 
-        // ================= ACCOUNT =================
         private void ToggleMenuTaiKhoan()
         {
             IsMenuTaiKhoanOpen = !IsMenuTaiKhoanOpen;
         }
 
+
+        private void LoadTongQuan()
+        {
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                var dsKhoDuocPhanCong = db.PHANCONG_KHO
+                    .Where(pc => pc.MATK == CurrentUser.MaTK && pc.TRANGTHAI == true)
+                    .Select(pc => pc.MAKHO)
+                    .ToList();
+
+                var dsPhieuNhap = db.PHIEUNHAPs
+                    .Where(pn => dsKhoDuocPhanCong.Contains(pn.MAKHO)
+                              && pn.TRANGTHAI != "Đã hủy")
+                    .ToList();
+
+                var dsPhieuXuat = db.PHIEUXUATs
+                    .Where(px => dsKhoDuocPhanCong.Contains(px.MAKHO)
+                              && px.TRANGTHAI != "Đã hủy")
+                    .ToList();
+
+                var dsMaPN = dsPhieuNhap.Select(pn => pn.MAPN).ToList();
+
+                TongPhieuNhap = dsPhieuNhap.Count;
+                TongPhieuXuat = dsPhieuXuat.Count;
+
+                TongGiaTriNhap = db.CT_PHIEUNHAP
+                    .Where(ct => dsMaPN.Contains(ct.MAPN))
+                    .Sum(ct => (decimal?)(ct.SOLUONG * ct.DONGIA)) ?? 0;
+            }
+        }
+        // ================= ACCOUNT =================
         private void DangXuat()
         {
             var hoi = MessageBox.Show(

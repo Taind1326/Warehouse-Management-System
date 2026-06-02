@@ -152,7 +152,9 @@
     <Compile Include="ViewModels\Admin\AdminViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcHangHoaViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcKhoViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcThongKeGiaTriKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcThongKeTongQuanViewModel.cs" />
+    <Compile Include="ViewModels\Admin\UcThongKeTonKhoViewModel.cs" />
     <Compile Include="ViewModels\Shared\UcCanhBaoViewModel.cs" />
     <Compile Include="ViewModels\Shared\UcKiemKeKhoViewModel.cs" />
     <Compile Include="ViewModels\Admin\UcLoaiHangViewModel.cs" />
@@ -184,6 +186,12 @@
     </Compile>
     <Compile Include="View\Admin\UcKho.xaml.cs">
       <DependentUpon>UcKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThongKeGiaTriKho.xaml.cs">
+      <DependentUpon>UcThongKeGiaTriKho.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Admin\UcThongKeTonKho.xaml.cs">
+      <DependentUpon>UcThongKeTonKho.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Shared\UcCanhBao.xaml.cs">
       <DependentUpon>UcCanhBao.xaml</DependentUpon>
@@ -338,6 +346,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Admin\UcKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThongKeGiaTriKho.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Admin\UcThongKeTonKho.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
