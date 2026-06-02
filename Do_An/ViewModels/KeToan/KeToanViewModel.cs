@@ -61,7 +61,7 @@ namespace Do_An.ViewModels.KeToan
         public ICommand TrangChuCommand { get; }
         public ICommand PhieuNhapCommand { get; }
         public ICommand PhieuXuatCommand { get; }
-        public ICommand ThongKePhieuNhapCommand { get; }
+        public ICommand OpenThongKeXuatKhoCommand { get; }
         public ICommand ThongKePhieuXuatCommand { get; }
         public ICommand ThongTinTaiKhoanCommand { get; }
         public ICommand DoiMatKhauCommand { get; }
@@ -79,7 +79,7 @@ namespace Do_An.ViewModels.KeToan
             TrangChuCommand = new RelayCommand(_ => OpenTrangChu());
             PhieuNhapCommand = new RelayCommand(_ => OpenPhieuNhap());
             PhieuXuatCommand = new RelayCommand(_ => OpenPhieuXuat());
-            ThongKePhieuNhapCommand = new RelayCommand(_ => OpenThongKePhieuNhap());
+            //ThongKeNhapKhoCommand = new RelayCommand(_ => OpenThongKeNhapKho());
             ThongKePhieuXuatCommand = new RelayCommand(_ => OpenThongKePhieuXuat());
             ThongTinTaiKhoanCommand = new RelayCommand(_ => OpenThongTinTaiKhoan());
             DoiMatKhauCommand = new RelayCommand(_ => OpenDoiMatKhau());
