@@ -257,6 +257,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="18"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
@@ -323,6 +325,29 @@
                                Foreground="#FF8D7B74"/>
                 </StackPanel>
             </Button>
+
+            <Button Grid.Column="6"
+                    Style="{StaticResource DashboardCardButtonStyle}"
+                    Command="{Binding OpenThongKeCommand}">
+
+                <StackPanel>
+                    <TextBlock Text="Thống kê"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#FF6B463B"/>
+
+                    <TextBlock Text="{Binding TongBaoCaoThang}"
+                               Margin="0,12,0,4"
+                               FontSize="34"
+                               FontWeight="Bold"
+                               Foreground="#FF3E2723"/>
+
+                    <TextBlock Text="Báo cáo trong tháng"
+                               FontSize="12"
+                               Foreground="#FF8D7B74"/>
+                </StackPanel>
+            </Button>
+            
 
         </Grid>
 

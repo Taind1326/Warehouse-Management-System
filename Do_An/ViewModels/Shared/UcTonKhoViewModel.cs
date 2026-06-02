@@ -10,7 +10,7 @@ namespace Do_An.ViewModels.Shared
     public class UcTonKhoViewModel : BaseViewModel
     {
         private readonly Action _veTrangChu;
-        
+
         private ObservableCollection<TonKhoItem> _danhSachTonKho;
         public ObservableCollection<TonKhoItem> DanhSachTonKho
         {
@@ -64,7 +64,7 @@ namespace Do_An.ViewModels.Shared
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var ds = db.TONKHOes
+                var ds = LocTonKhoTheoTaiKhoan(db)
                     .ToList()
                     .Select((tk, index) => TaoTonKhoItem(tk, index))
                     .ToList();
@@ -98,7 +98,7 @@ namespace Do_An.ViewModels.Shared
 
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var ds = db.TONKHOes
+                var ds = LocTonKhoTheoTaiKhoan(db)
                     .ToList()
                     .Where(tk =>
                         string.IsNullOrWhiteSpace(tuKhoa) ||
@@ -118,6 +118,26 @@ namespace Do_An.ViewModels.Shared
             }
         }
 
+        private IQueryable<TONKHO> LocTonKhoTheoTaiKhoan(QUANLI_KHOHANGEntities db)
+        {
+            if (LaAdmin(db))
+                return db.TONKHOes;
+
+            return db.TONKHOes.Where(tk =>
+                db.PHANCONG_KHO.Any(pc =>
+                    pc.MATK == CurrentUser.MaTK &&
+                    pc.MAKHO == tk.MAKHO &&
+                    pc.TRANGTHAI == true));
+        }
+
+        private bool LaAdmin(QUANLI_KHOHANGEntities db)
+        {
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "Admin");
+        }
+
         private string LayTrangThaiTon(int soLuongTon, int mucToiThieu)
         {
             if (soLuongTon <= 0)
@@ -133,7 +153,6 @@ namespace Do_An.ViewModels.Shared
         {
             _veTrangChu?.Invoke();
         }
-
     }
 
     public class TonKhoItem

@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -124,7 +125,7 @@ namespace Do_An.ViewModels.Shared
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var ds = db.PHIEUXUATs
+                var ds = LocPhieuXuatTheoTaiKhoan(db)
                     .ToList()
                     .Select((px, index) => TaoPhieuXuatItem(px, index))
                     .ToList();
@@ -138,13 +139,22 @@ namespace Do_An.ViewModels.Shared
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                DanhSachNoiXuat = new ObservableCollection<string>(
-                    db.KHOes.Select(x => x.TENKHO).ToList());
+                if (LaAdmin(db))
+                {
+                    DanhSachNoiXuat = new ObservableCollection<string>(
+                        db.KHOes.Select(x => x.TENKHO).ToList());
+                }
+                else
+                {
+                    DanhSachNoiXuat = new ObservableCollection<string>(
+                        db.PHANCONG_KHO
+                            .Where(pc => pc.MATK == CurrentUser.MaTK && pc.TRANGTHAI == true)
+                            .Select(pc => pc.KHO.TENKHO)
+                            .ToList());
+                }
 
                 DanhSachNoiNhan = new ObservableCollection<string>(
-                    db.KHOes
-                      .Select(x => x.TENKHO)
-                      .ToList());
+                    db.KHOes.Select(x => x.TENKHO).ToList());
 
                 DanhSachNguoiLap = new ObservableCollection<string>
                 {
@@ -155,16 +165,16 @@ namespace Do_An.ViewModels.Shared
 
                 DanhSachSanPham = new ObservableCollection<SanPhamXuatItem>(
                     db.SANPHAMs
-                      .ToList()
-                      .Select(sp => new SanPhamXuatItem
-                      {
-                          MaSP = sp.MASP,
-                          TenSP = sp.TENSP,
-                          TenLoai = sp.LOAIHANG?.TENLOAI ?? "",
-                          DonViTinh = sp.DONVITINH?.TENDVT ?? "",
-                          DonGia = sp.DONGIA
-                      })
-                      .ToList());
+                        .ToList()
+                        .Select(sp => new SanPhamXuatItem
+                        {
+                            MaSP = sp.MASP,
+                            TenSP = sp.TENSP,
+                            TenLoai = sp.LOAIHANG?.TENLOAI ?? "",
+                            DonViTinh = sp.DONVITINH?.TENDVT ?? "",
+                            DonGia = sp.DONGIA
+                        })
+                        .ToList());
             }
 
             DanhSachTrangThai = new ObservableCollection<string>
@@ -194,6 +204,15 @@ namespace Do_An.ViewModels.Shared
 
         private void MoThem()
         {
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                if (!CoQuyenThemPhieuXuat(db))
+                {
+                    MessageBox.Show("Chỉ Admin và Nhân viên kho được thêm phiếu xuất!");
+                    return;
+                }
+            }
+
             IsEdit = false;
             XoaForm();
             BaoThayDoiForm();
@@ -206,6 +225,15 @@ namespace Do_An.ViewModels.Shared
             {
                 MessageBox.Show("Vui lòng chọn phiếu xuất cần sửa!");
                 return;
+            }
+
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                if (!CoQuyenThemPhieuXuat(db))
+                {
+                    MessageBox.Show("Kế toán chỉ được xem phiếu xuất, không được sửa!");
+                    return;
+                }
             }
 
             if (SelectedItem.TrangThai != "Lưu tạm")
@@ -221,63 +249,6 @@ namespace Do_An.ViewModels.Shared
 
             _moForm?.Invoke();
         }
-
-        private string LayTenKhoNhanTheoMa(string maKhoNhan)
-        {
-            using (var db = new QUANLI_KHOHANGEntities())
-            {
-                return db.KHOes
-                    .FirstOrDefault(x => x.MAKHO == maKhoNhan)
-                    ?.TENKHO ?? "";
-            }
-        }
-
-        private void CongTonKhoNhanTheoDanhSachMoi(QUANLI_KHOHANGEntities db, string maKhoNhan)
-        {
-            foreach (var item in DanhSachChiTietXuat)
-            {
-                var tonKho = db.TONKHOes.FirstOrDefault(x =>
-                    x.MAKHO == maKhoNhan &&
-                    x.MASP == item.MaHang);
-
-                if (tonKho == null)
-                {
-                    tonKho = new TONKHO
-                    {
-                        MAKHO = maKhoNhan,
-                        MASP = item.MaHang,
-                        SOLUONGTON = 0
-                    };
-
-                    db.TONKHOes.Add(tonKho);
-                }
-
-                tonKho.SOLUONGTON += item.SoLuong;
-            }
-        }
-
-        private void TruTonKhoNhanTheoChiTietCu(QUANLI_KHOHANGEntities db, string maKhoNhan, string maPX)
-        {
-            var dsCu = db.CT_PHIEUXUAT
-                .Where(x => x.MAPX == maPX)
-                .ToList();
-
-            foreach (var item in dsCu)
-            {
-                var tonKho = db.TONKHOes.FirstOrDefault(x =>
-                    x.MAKHO == maKhoNhan &&
-                    x.MASP == item.MASP);
-
-                if (tonKho == null)
-                    throw new Exception("Không tìm thấy tồn kho nhận của sản phẩm " + item.MASP);
-
-                if (tonKho.SOLUONGTON < item.SOLUONG)
-                    throw new Exception("Tồn kho nhận không đủ để hủy/sửa phiếu xuất " + maPX);
-
-                tonKho.SOLUONGTON -= item.SOLUONG;
-            }
-        }
-
 
         private void XoaPhieuXuat()
         {
@@ -300,16 +271,23 @@ namespace Do_An.ViewModels.Shared
             {
                 using (var db = new QUANLI_KHOHANGEntities())
                 {
-                    var px = db.PHIEUXUATs
+                    var px = LocPhieuXuatTheoTaiKhoan(db)
                         .FirstOrDefault(x => x.MAPX == SelectedItem.MaPhieuXuat);
 
                     if (px == null)
                     {
-                        MessageBox.Show("Không tìm thấy phiếu xuất cần xóa!");
+                        MessageBox.Show("Không tìm thấy phiếu xuất hoặc bạn không có quyền thao tác phiếu này!");
                         return;
                     }
 
                     bool laAdmin = LaAdmin(db);
+                    bool laNhanVienKho = LaNhanVienKho(db);
+
+                    if (!laAdmin && !laNhanVienKho)
+                    {
+                        MessageBox.Show("Kế toán chỉ được xem phiếu xuất, không được xóa/hủy!");
+                        return;
+                    }
 
                     if (px.TRANGTHAI == "Đã hủy")
                     {
@@ -330,10 +308,7 @@ namespace Do_An.ViewModels.Shared
 
                         px.TRANGTHAI = "Đã hủy";
 
-                        GhiLog(
-                            db,
-                            "Hủy phiếu xuất",
-                            px.MAPX,
+                        GhiLog(db, "Hủy phiếu xuất", px.MAPX,
                             "Admin chuyển phiếu xuất sang trạng thái Đã hủy");
 
                         db.SaveChanges();
@@ -350,9 +325,7 @@ namespace Do_An.ViewModels.Shared
                             .ToList();
 
                         foreach (var item in chiTiet)
-                        {
                             db.CT_PHIEUXUAT.Remove(item);
-                        }
 
                         db.PHIEUXUATs.Remove(px);
 
@@ -371,19 +344,8 @@ namespace Do_An.ViewModels.Shared
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Xóa phiếu xuất thất bại!\n" + ex.Message);
+                MessageBox.Show("Xóa phiếu xuất thất bại!\n" + LayLoiChiTiet(ex));
             }
-        }
-
-        private bool LaAdmin(QUANLI_KHOHANGEntities db)
-        {
-            var taiKhoan = db.TAIKHOANs
-                .FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
-
-            if (taiKhoan == null)
-                return false;
-
-            return taiKhoan.VAITROes.Any(vt => vt.TENVT == "Admin");
         }
 
         private void LoadChiTietPhieuXuat(string maPX)
@@ -482,6 +444,12 @@ namespace Do_An.ViewModels.Shared
             {
                 using (var db = new QUANLI_KHOHANGEntities())
                 {
+                    if (!CoQuyenThemPhieuXuat(db))
+                    {
+                        MessageBox.Show("Kế toán chỉ được xem phiếu xuất, không được thêm/sửa!");
+                        return;
+                    }
+
                     if (IsEdit)
                         SuaPhieuXuat(db, trangThai);
                     else
@@ -498,7 +466,7 @@ namespace Do_An.ViewModels.Shared
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lưu phiếu xuất thất bại!\n" + ex.Message);
+                MessageBox.Show("Lưu phiếu xuất thất bại!\n" + LayLoiChiTiet(ex));
             }
         }
 
@@ -510,6 +478,9 @@ namespace Do_An.ViewModels.Shared
             string maKho = LayMaKho(db);
             string maKhoNhan = LayMaKhoNhan(db);
 
+            if (!CoQuyenThaoTacKho(db, maKho))
+                throw new Exception("Bạn không có quyền xuất hàng từ kho này!");
+
             if (trangThai == "Đã xuất")
                 KiemTraTonKhoDuDeXuat(db, maKho);
 
@@ -518,7 +489,7 @@ namespace Do_An.ViewModels.Shared
                 MAPX = MaPhieuXuat,
                 MAKHO = maKho,
                 MAKHONHAN = maKhoNhan,
-                MATK = LayMaTaiKhoan(db),
+                MATK = CurrentUser.MaTK,
                 NGAYXUAT = NgayXuat,
                 TONGTIEN = TongTien,
                 TRANGTHAI = trangThai
@@ -549,25 +520,20 @@ namespace Do_An.ViewModels.Shared
 
         private void SuaPhieuXuat(QUANLI_KHOHANGEntities db, string trangThai)
         {
-            var px = db.PHIEUXUATs.FirstOrDefault(x => x.MAPX == MaPhieuXuat);
+            var px = LocPhieuXuatTheoTaiKhoan(db)
+                .FirstOrDefault(x => x.MAPX == MaPhieuXuat);
 
             if (px == null)
-                throw new Exception("Không tìm thấy phiếu xuất cần sửa!");
+                throw new Exception("Không tìm thấy phiếu xuất hoặc bạn không có quyền sửa phiếu này!");
 
             if (px.TRANGTHAI != "Lưu tạm")
                 throw new Exception("Chỉ được sửa phiếu xuất có trạng thái Lưu tạm!");
 
-            string maKhoCu = px.MAKHO;
-            string maKhoNhanCu = px.MAKHONHAN;
-            string trangThaiCu = px.TRANGTHAI;
             string maKhoMoi = LayMaKho(db);
             string maKhoNhanMoi = LayMaKhoNhan(db);
 
-            if (trangThaiCu == "Đã xuất")
-            {
-                CongTonKhoTheoChiTietCu(db, maKhoCu, px.MAPX);
-                TruTonKhoNhanTheoChiTietCu(db, maKhoNhanCu, px.MAPX);
-            }
+            if (!CoQuyenThaoTacKho(db, maKhoMoi))
+                throw new Exception("Bạn không có quyền xuất hàng từ kho này!");
 
             if (trangThai == "Đã xuất")
                 KiemTraTonKhoDuDeXuat(db, maKhoMoi);
@@ -671,13 +637,71 @@ namespace Do_An.ViewModels.Shared
             }
         }
 
+        private void CongTonKhoNhanTheoDanhSachMoi(QUANLI_KHOHANGEntities db, string maKhoNhan)
+        {
+            foreach (var item in DanhSachChiTietXuat)
+            {
+                var tonKho = db.TONKHOes.FirstOrDefault(x =>
+                    x.MAKHO == maKhoNhan &&
+                    x.MASP == item.MaHang);
+
+                if (tonKho == null)
+                {
+                    tonKho = new TONKHO
+                    {
+                        MAKHO = maKhoNhan,
+                        MASP = item.MaHang,
+                        SOLUONGTON = 0
+                    };
+
+                    db.TONKHOes.Add(tonKho);
+                }
+
+                tonKho.SOLUONGTON += item.SoLuong;
+            }
+        }
+
+        private void TruTonKhoNhanTheoChiTietCu(QUANLI_KHOHANGEntities db, string maKhoNhan, string maPX)
+        {
+            var dsCu = db.CT_PHIEUXUAT
+                .Where(x => x.MAPX == maPX)
+                .ToList();
+
+            foreach (var item in dsCu)
+            {
+                var tonKho = db.TONKHOes.FirstOrDefault(x =>
+                    x.MAKHO == maKhoNhan &&
+                    x.MASP == item.MASP);
+
+                if (tonKho == null)
+                    throw new Exception("Không tìm thấy tồn kho nhận của sản phẩm " + item.MASP);
+
+                if (tonKho.SOLUONGTON < item.SOLUONG)
+                    throw new Exception("Tồn kho nhận không đủ để hủy/sửa phiếu xuất " + maPX);
+
+                tonKho.SOLUONGTON -= item.SOLUONG;
+            }
+        }
+
         private bool KiemTraDuLieu()
         {
             MaPhieuXuat = MaPhieuXuat?.Trim();
 
             if (string.IsNullOrWhiteSpace(MaPhieuXuat))
             {
-                MessageBox.Show("Vui lòng nhập mã phiếu xuất!");
+                MessageBox.Show("Mã phiếu xuất không được để trống!");
+                return false;
+            }
+
+            if (!Regex.IsMatch(MaPhieuXuat, @"^PX\d{4}$"))
+            {
+                MessageBox.Show("Mã phiếu xuất phải có dạng PX0001!");
+                return false;
+            }
+
+            if (NgayXuat.Date > DateTime.Now.Date)
+            {
+                MessageBox.Show("Ngày xuất không được lớn hơn ngày hiện tại!");
                 return false;
             }
 
@@ -707,7 +731,7 @@ namespace Do_An.ViewModels.Shared
 
             if (DanhSachChiTietXuat == null || DanhSachChiTietXuat.Count == 0)
             {
-                MessageBox.Show("Vui lòng thêm ít nhất một sản phẩm vào phiếu xuất!");
+                MessageBox.Show("Phiếu xuất phải có ít nhất 1 sản phẩm!");
                 return false;
             }
 
@@ -720,7 +744,7 @@ namespace Do_An.ViewModels.Shared
 
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var ds = db.PHIEUXUATs
+                var ds = LocPhieuXuatTheoTaiKhoan(db)
                     .ToList()
                     .Where(px =>
                         string.IsNullOrWhiteSpace(tuKhoa) ||
@@ -738,56 +762,39 @@ namespace Do_An.ViewModels.Shared
             }
         }
 
-        private void VeTrangChu()
+        private string LayTenKhoNhanTheoMa(string maKhoNhan)
         {
-            _veTrangChu?.Invoke();
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                return db.KHOes.FirstOrDefault(x => x.MAKHO == maKhoNhan)?.TENKHO ?? "";
+            }
         }
 
         private string LayMaKho(QUANLI_KHOHANGEntities db)
         {
-            return db.KHOes
-                .FirstOrDefault(x => x.TENKHO == NoiXuatDuocChon)
-                ?.MAKHO;
+            return db.KHOes.FirstOrDefault(x => x.TENKHO == NoiXuatDuocChon)?.MAKHO;
         }
 
         private string LayTenKho(QUANLI_KHOHANGEntities db, string maKho)
         {
-            return db.KHOes
-                .FirstOrDefault(x => x.MAKHO == maKho)
-                ?.TENKHO;
+            return db.KHOes.FirstOrDefault(x => x.MAKHO == maKho)?.TENKHO;
         }
 
         private string LayMaKhoNhan(QUANLI_KHOHANGEntities db)
         {
-            return db.KHOes
-                .FirstOrDefault(x => x.TENKHO == NoiNhanDuocChon)
-                ?.MAKHO;
+            return db.KHOes.FirstOrDefault(x => x.TENKHO == NoiNhanDuocChon)?.MAKHO;
         }
 
         private string LayTenKhoNhan(QUANLI_KHOHANGEntities db, string maKhoNhan)
         {
-            return db.KHOes
-                .FirstOrDefault(x => x.MAKHO == maKhoNhan)
-                ?.TENKHO;
-        }
-
-        private string LayMaTaiKhoan(QUANLI_KHOHANGEntities db)
-        {
-            return CurrentUser.MaTK;
-        }
-
-        private string LayTenTaiKhoan(QUANLI_KHOHANGEntities db, string maTK)
-        {
-            return db.TAIKHOANs
-                .FirstOrDefault(x => x.MATK == maTK)
-                ?.TENTK;
+            return db.KHOes.FirstOrDefault(x => x.MAKHO == maKhoNhan)?.TENKHO;
         }
 
         private void DoDuLieuLenForm(PhieuXuatItem item)
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var px = db.PHIEUXUATs
+                var px = LocPhieuXuatTheoTaiKhoan(db)
                     .FirstOrDefault(x => x.MAPX == item.MaPhieuXuat);
 
                 if (px == null)
@@ -797,7 +804,7 @@ namespace Do_An.ViewModels.Shared
                 NgayXuat = px.NGAYXUAT;
                 NoiXuatDuocChon = LayTenKho(db, px.MAKHO);
                 NoiNhanDuocChon = LayTenKhoNhan(db, px.MAKHONHAN);
-                NguoiLapDuocChon = LayTenTaiKhoan(db, px.MATK);
+                NguoiLapDuocChon = px.TAIKHOAN?.TENTK ?? CurrentUser.TenTK;
                 TrangThaiDuocChon = px.TRANGTHAI;
             }
         }
@@ -828,6 +835,63 @@ namespace Do_An.ViewModels.Shared
             OnPropertyChanged(nameof(DanhSachChiTietXuat));
         }
 
+        private bool LaAdmin(QUANLI_KHOHANGEntities db)
+        {
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "Admin");
+        }
+
+        private bool LaNhanVienKho(QUANLI_KHOHANGEntities db)
+        {
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "NhanVienKho");
+        }
+
+        private bool LaKeToan(QUANLI_KHOHANGEntities db)
+        {
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "KeToan");
+        }
+
+        private bool CoQuyenThemPhieuXuat(QUANLI_KHOHANGEntities db)
+        {
+            return LaAdmin(db) || LaNhanVienKho(db);
+        }
+
+        private bool CoQuyenThaoTacKho(QUANLI_KHOHANGEntities db, string maKho)
+        {
+            if (LaAdmin(db))
+                return true;
+
+            return db.PHANCONG_KHO.Any(pc =>
+                pc.MATK == CurrentUser.MaTK &&
+                pc.MAKHO == maKho &&
+                pc.TRANGTHAI == true);
+        }
+
+        private IQueryable<PHIEUXUAT> LocPhieuXuatTheoTaiKhoan(QUANLI_KHOHANGEntities db)
+        {
+            if (LaAdmin(db))
+                return db.PHIEUXUATs;
+
+            return db.PHIEUXUATs.Where(px =>
+                db.PHANCONG_KHO.Any(pc =>
+                    pc.MATK == CurrentUser.MaTK &&
+                    pc.MAKHO == px.MAKHO &&
+                    pc.TRANGTHAI == true));
+        }
+
+        private void VeTrangChu()
+        {
+            _veTrangChu?.Invoke();
+        }
+
         private void GhiLog(QUANLI_KHOHANGEntities db, string hanhDong, string doiTuong, string ghiChu)
         {
             db.NHATKies.Add(new NHATKY
@@ -850,6 +914,19 @@ namespace Do_An.ViewModels.Shared
         private string DinhDangTien(decimal soTien)
         {
             return soTien.ToString("N0", CultureInfo.GetCultureInfo("vi-VN")) + " đ";
+        }
+
+        private string LayLoiChiTiet(Exception ex)
+        {
+            string loi = ex.Message;
+
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                loi += "\n" + ex.Message;
+            }
+
+            return loi;
         }
 
         private void BaoThayDoiComboBox()

@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -164,7 +165,7 @@ namespace Do_An.ViewModels.Shared
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var ds = db.PHIEUNHAPs
+                var ds = LocPhieuNhapTheoTaiKhoan(db)
                     .ToList()
                     .Select((pn, index) => TaoPhieuNhapItem(pn, index))
                     .ToList();
@@ -177,8 +178,19 @@ namespace Do_An.ViewModels.Shared
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                DanhSachKho = new ObservableCollection<string>(
-                    db.KHOes.Select(x => x.TENKHO).ToList());
+                if (LaAdmin(db) || LaKeToan(db))
+                {
+                    DanhSachKho = new ObservableCollection<string>(
+                        db.KHOes.Select(x => x.TENKHO).ToList());
+                }
+                else
+                {
+                    DanhSachKho = new ObservableCollection<string>(
+                        db.PHANCONG_KHO
+                            .Where(pc => pc.MATK == CurrentUser.MaTK && pc.TRANGTHAI == true)
+                            .Select(pc => pc.KHO.TENKHO)
+                            .ToList());
+                }
 
                 DanhSachNhaSanXuat = new ObservableCollection<string>(
                     db.NHASANXUATs.Select(x => x.TENNSX).ToList());
@@ -192,17 +204,17 @@ namespace Do_An.ViewModels.Shared
 
                 TatCaSanPham = new ObservableCollection<SanPhamNhapItem>(
                     db.SANPHAMs
-                      .ToList()
-                      .Select(sp => new SanPhamNhapItem
-                      {
-                          MaSP = sp.MASP,
-                          TenSP = sp.TENSP,
-                          TenLoai = sp.LOAIHANG?.TENLOAI ?? "",
-                          DonViTinh = sp.DONVITINH?.TENDVT ?? "",
-                          DonGia = sp.DONGIA,
-                          MaNSX = sp.MANSX
-                      })
-                      .ToList());
+                        .ToList()
+                        .Select(sp => new SanPhamNhapItem
+                        {
+                            MaSP = sp.MASP,
+                            TenSP = sp.TENSP,
+                            TenLoai = sp.LOAIHANG?.TENLOAI ?? "",
+                            DonViTinh = sp.DONVITINH?.TENDVT ?? "",
+                            DonGia = sp.DONGIA,
+                            MaNSX = sp.MANSX
+                        })
+                        .ToList());
 
                 DanhSachSanPham = new ObservableCollection<SanPhamNhapItem>(TatCaSanPham);
             }
@@ -262,6 +274,15 @@ namespace Do_An.ViewModels.Shared
                 return;
             }
 
+            using (var db = new QUANLI_KHOHANGEntities())
+            {
+                if (!CoQuyenThemPhieuNhap(db))
+                {
+                    MessageBox.Show("Kế toán chỉ được xem phiếu nhập, không được sửa!");
+                    return;
+                }
+            }
+
             if (SelectedItem.TrangThai != "Lưu tạm")
             {
                 MessageBox.Show("Chỉ được sửa phiếu nhập có trạng thái Lưu tạm!");
@@ -297,16 +318,23 @@ namespace Do_An.ViewModels.Shared
             {
                 using (var db = new QUANLI_KHOHANGEntities())
                 {
-                    var pn = db.PHIEUNHAPs
+                    var pn = LocPhieuNhapTheoTaiKhoan(db)
                         .FirstOrDefault(x => x.MAPN == SelectedItem.MaPhieuNhap);
 
                     if (pn == null)
                     {
-                        MessageBox.Show("Không tìm thấy phiếu nhập cần xóa!");
+                        MessageBox.Show("Không tìm thấy phiếu nhập hoặc bạn không có quyền thao tác phiếu này!");
                         return;
                     }
 
                     bool laAdmin = LaAdmin(db);
+                    bool laNhanVienKho = LaNhanVienKho(db);
+
+                    if (!laAdmin && !laNhanVienKho)
+                    {
+                        MessageBox.Show("Kế toán chỉ được xem phiếu nhập, không được xóa/hủy!");
+                        return;
+                    }
 
                     if (pn.TRANGTHAI == "Đã hủy")
                     {
@@ -323,13 +351,9 @@ namespace Do_An.ViewModels.Shared
                         }
 
                         TruTonKhoTheoChiTietCu(db, pn.MAKHO, pn.MAPN);
-
                         pn.TRANGTHAI = "Đã hủy";
 
-                        GhiLog(
-                            db,
-                            "Hủy phiếu nhập",
-                            pn.MAPN,
+                        GhiLog(db, "Hủy phiếu nhập", pn.MAPN,
                             "Admin chuyển phiếu nhập sang trạng thái Đã hủy");
 
                         db.SaveChanges();
@@ -346,9 +370,7 @@ namespace Do_An.ViewModels.Shared
                             .ToList();
 
                         foreach (var item in chiTiet)
-                        {
                             db.CT_PHIEUNHAP.Remove(item);
-                        }
 
                         db.PHIEUNHAPs.Remove(pn);
 
@@ -367,7 +389,7 @@ namespace Do_An.ViewModels.Shared
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Xóa phiếu nhập thất bại!\n" + ex.Message);
+                MessageBox.Show("Xóa phiếu nhập thất bại!\n" + LayLoiChiTiet(ex));
             }
         }
 
@@ -463,9 +485,9 @@ namespace Do_An.ViewModels.Shared
             {
                 using (var db = new QUANLI_KHOHANGEntities())
                 {
-                    if (!IsEdit && !CoQuyenThemPhieuNhap(db))
+                    if (!CoQuyenThemPhieuNhap(db))
                     {
-                        MessageBox.Show("Chỉ Admin và Nhân viên kho được thêm phiếu nhập!");
+                        MessageBox.Show("Kế toán chỉ được xem phiếu nhập, không được thêm/sửa!");
                         return;
                     }
 
@@ -485,7 +507,7 @@ namespace Do_An.ViewModels.Shared
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lưu phiếu nhập thất bại!\n" + ex.Message);
+                MessageBox.Show("Lưu phiếu nhập thất bại!\n" + LayLoiChiTiet(ex));
             }
         }
 
@@ -496,12 +518,15 @@ namespace Do_An.ViewModels.Shared
 
             string maKho = LayMaKho(db);
 
+            if (!CoQuyenThaoTacKho(db, maKho))
+                throw new Exception("Bạn không có quyền nhập hàng vào kho này!");
+
             var pn = new PHIEUNHAP
             {
                 MAPN = MaPhieuNhap,
                 MAKHO = maKho,
                 MANSX = LayMaNSX(db),
-                MATK = LayMaTaiKhoan(db),
+                MATK = CurrentUser.MaTK,
                 NGAYNHAP = NgayNhap,
                 TONGTIEN = TongTien,
                 TRANGTHAI = trangThai
@@ -529,20 +554,20 @@ namespace Do_An.ViewModels.Shared
 
         private void SuaPhieuNhap(QUANLI_KHOHANGEntities db, string trangThai)
         {
-            var pn = db.PHIEUNHAPs.FirstOrDefault(x => x.MAPN == MaPhieuNhap);
+            var pn = LocPhieuNhapTheoTaiKhoan(db)
+                .FirstOrDefault(x => x.MAPN == MaPhieuNhap);
 
             if (pn == null)
-                throw new Exception("Không tìm thấy phiếu nhập cần sửa!");
+                throw new Exception("Không tìm thấy phiếu nhập hoặc bạn không có quyền sửa phiếu này!");
 
             if (pn.TRANGTHAI != "Lưu tạm")
                 throw new Exception("Chỉ được sửa phiếu nhập có trạng thái Lưu tạm!");
 
             string maKhoCu = pn.MAKHO;
-            string trangThaiCu = pn.TRANGTHAI;
             string maKhoMoi = LayMaKho(db);
 
-            if (trangThaiCu == "Đã nhập")
-                TruTonKhoTheoChiTietCu(db, maKhoCu, pn.MAPN);
+            if (!CoQuyenThaoTacKho(db, maKhoMoi))
+                throw new Exception("Bạn không có quyền nhập hàng vào kho này!");
 
             pn.MAKHO = maKhoMoi;
             pn.MANSX = LayMaNSX(db);
@@ -555,9 +580,7 @@ namespace Do_An.ViewModels.Shared
                 .ToList();
 
             foreach (var ct in dsCu)
-            {
                 db.CT_PHIEUNHAP.Remove(ct);
-            }
 
             foreach (var item in DanhSachChiTietNhap)
             {
@@ -625,17 +648,15 @@ namespace Do_An.ViewModels.Shared
 
         private bool KiemTraDuLieu()
         {
-            MaPhieuNhap = MaPhieuNhap?.Trim();
-
             if (string.IsNullOrWhiteSpace(MaPhieuNhap))
             {
-                MessageBox.Show("Vui lòng nhập mã phiếu nhập!");
+                MessageBox.Show("Mã phiếu nhập không được để trống!");
                 return false;
             }
 
-            if (!KiemTraMaPhieuNhap(MaPhieuNhap))
+            if (!Regex.IsMatch(MaPhieuNhap, @"^PN\d{4}$"))
             {
-                MessageBox.Show("Mã phiếu nhập phải có dạng PN + số. Ví dụ: PN001, PN0001.");
+                MessageBox.Show("Mã phiếu nhập phải có dạng PN0001!");
                 return false;
             }
 
@@ -651,21 +672,20 @@ namespace Do_An.ViewModels.Shared
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(CurrentUser.MaTK))
+            if (DanhSachChiTietNhap == null || DanhSachChiTietNhap.Count == 0)
             {
-                MessageBox.Show("Không xác định được tài khoản đang đăng nhập!");
+                MessageBox.Show("Phiếu nhập phải có ít nhất 1 sản phẩm!");
                 return false;
             }
 
-            if (DanhSachChiTietNhap == null || DanhSachChiTietNhap.Count == 0)
+            if (NgayNhap > DateTime.Now)
             {
-                MessageBox.Show("Vui lòng thêm ít nhất một sản phẩm vào phiếu nhập!");
+                MessageBox.Show("Ngày nhập không hợp lệ!");
                 return false;
             }
 
             return true;
         }
-
         private bool KiemTraMaPhieuNhap(string maPhieuNhap)
         {
             if (string.IsNullOrWhiteSpace(maPhieuNhap))
@@ -690,7 +710,7 @@ namespace Do_An.ViewModels.Shared
 
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var ds = db.PHIEUNHAPs
+                var ds = LocPhieuNhapTheoTaiKhoan(db)
                     .ToList()
                     .Where(pn =>
                         string.IsNullOrWhiteSpace(tuKhoa) ||
@@ -748,21 +768,12 @@ namespace Do_An.ViewModels.Shared
             return db.NHASANXUATs.FirstOrDefault(x => x.MANSX == maNSX)?.TENNSX;
         }
 
-        private string LayMaTaiKhoan(QUANLI_KHOHANGEntities db)
-        {
-            return CurrentUser.MaTK;
-        }
-
-        private string LayTenTaiKhoan(QUANLI_KHOHANGEntities db, string maTK)
-        {
-            return db.TAIKHOANs.FirstOrDefault(x => x.MATK == maTK)?.TENTK;
-        }
-
         private void DoDuLieuLenForm(PhieuNhapItem item)
         {
             using (var db = new QUANLI_KHOHANGEntities())
             {
-                var pn = db.PHIEUNHAPs.FirstOrDefault(x => x.MAPN == item.MaPhieuNhap);
+                var pn = LocPhieuNhapTheoTaiKhoan(db)
+                    .FirstOrDefault(x => x.MAPN == item.MaPhieuNhap);
 
                 if (pn == null)
                     return;
@@ -771,7 +782,7 @@ namespace Do_An.ViewModels.Shared
                 NgayNhap = pn.NGAYNHAP;
                 KhoDuocChon = LayTenKho(db, pn.MAKHO);
                 NhaSanXuatDuocChon = LayTenNSX(db, pn.MANSX);
-                NguoiLapDuocChon = LayTenTaiKhoan(db, pn.MATK);
+                NguoiLapDuocChon = pn.TAIKHOAN?.TENTK ?? CurrentUser.TenTK;
                 TrangThaiDuocChon = pn.TRANGTHAI;
             }
         }
@@ -803,29 +814,54 @@ namespace Do_An.ViewModels.Shared
 
         private bool LaAdmin(QUANLI_KHOHANGEntities db)
         {
-            var taiKhoan = db.TAIKHOANs
-                .FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
 
-            if (taiKhoan == null)
-                return false;
-
-            return taiKhoan.VAITROes.Any(vt => vt.TENVT == "Admin");
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "Admin");
         }
 
         private bool LaNhanVienKho(QUANLI_KHOHANGEntities db)
         {
-            var taiKhoan = db.TAIKHOANs
-                .FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
 
-            if (taiKhoan == null)
-                return false;
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "NhanVienKho");
+        }
 
-            return taiKhoan.VAITROes.Any(vt => vt.TENVT == "NhanVienKho");
+        private bool LaKeToan(QUANLI_KHOHANGEntities db)
+        {
+            var taiKhoan = db.TAIKHOANs.FirstOrDefault(x => x.MATK == CurrentUser.MaTK);
+
+            return taiKhoan != null &&
+                   taiKhoan.VAITROes.Any(vt => vt.TENVT == "KeToan");
         }
 
         private bool CoQuyenThemPhieuNhap(QUANLI_KHOHANGEntities db)
         {
             return LaAdmin(db) || LaNhanVienKho(db);
+        }
+
+        private bool CoQuyenThaoTacKho(QUANLI_KHOHANGEntities db, string maKho)
+        {
+            if (LaAdmin(db))
+                return true;
+
+            return db.PHANCONG_KHO.Any(pc =>
+                pc.MATK == CurrentUser.MaTK &&
+                pc.MAKHO == maKho &&
+                pc.TRANGTHAI == true);
+        }
+
+        private IQueryable<PHIEUNHAP> LocPhieuNhapTheoTaiKhoan(QUANLI_KHOHANGEntities db)
+        {
+            if (LaAdmin(db) || LaKeToan(db))
+                return db.PHIEUNHAPs;
+
+            return db.PHIEUNHAPs.Where(pn =>
+                db.PHANCONG_KHO.Any(pc =>
+                    pc.MATK == CurrentUser.MaTK &&
+                    pc.MAKHO == pn.MAKHO &&
+                    pc.TRANGTHAI == true));
         }
 
         private void VeTrangChu()
