@@ -699,9 +699,9 @@ namespace Do_An.ViewModels.Shared
                 return false;
             }
 
-            if (NgayXuat.Date > DateTime.Now.Date)
+            if (NgayXuat.Date < DateTime.Today)
             {
-                MessageBox.Show("Ngày xuất không được lớn hơn ngày hiện tại!");
+                MessageBox.Show("Ngày xuất không được nhỏ hơn ngày hiện tại!");
                 return false;
             }
 

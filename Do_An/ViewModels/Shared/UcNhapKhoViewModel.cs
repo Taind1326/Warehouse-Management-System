@@ -678,7 +678,7 @@ namespace Do_An.ViewModels.Shared
                 return false;
             }
 
-            if (NgayNhap > DateTime.Now)
+            if (NgayNhap < DateTime.Today)
             {
                 MessageBox.Show("Ngày nhập không hợp lệ!");
                 return false;
