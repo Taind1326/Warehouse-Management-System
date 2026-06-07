@@ -267,7 +267,7 @@ This project was developed for educational purposes to practice:
 
 # 👤 Author
 
-**Nguyen Dai Tai**
+**Nguyen Dai Tai &**
 **Le Thi Minh Chien**
 
 Student Project - Warehouse Management System
